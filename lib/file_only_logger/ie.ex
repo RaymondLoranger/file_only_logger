@@ -1,4 +1,6 @@
 defmodule GenLog do
+  @moduledoc false
+
   use File.Only.Logger
 
   error :exit, {reason} do
