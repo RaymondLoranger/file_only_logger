@@ -1,6 +1,6 @@
-# File.Only.Logger
+# File Only Logger
 
-**TODO: Add description**
+A simple logger which writes formatted messages to files only (not to the console).
 
 ## Installation
 
