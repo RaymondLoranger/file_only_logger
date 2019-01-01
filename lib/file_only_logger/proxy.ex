@@ -1,4 +1,4 @@
-defmodule File.Only.Logger.Proxy do
+defmodule File.Only.Logger.Agent do
   use PersistConfig
 
   require Logger

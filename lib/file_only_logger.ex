@@ -8,7 +8,7 @@ defmodule File.Only.Logger do
   defmacro debug(event, variables, do: message) do
     quote do
       def debug(unquote(event), unquote(variables)) do
-        File.Only.Logger.Proxy.log(:debug, unquote(message))
+        File.Only.Logger.Agent.log(:debug, unquote(message))
       end
     end
   end
@@ -33,7 +33,7 @@ defmodule File.Only.Logger do
   defmacro info(event, variables, do: message) do
     quote do
       def info(unquote(event), unquote(variables)) do
-        File.Only.Logger.Proxy.log(:info, unquote(message))
+        File.Only.Logger.Agent.log(:info, unquote(message))
       end
     end
   end
@@ -41,7 +41,7 @@ defmodule File.Only.Logger do
   defmacro warn(event, variables, do: message) do
     quote do
       def warn(unquote(event), unquote(variables)) do
-        File.Only.Logger.Proxy.log(:warn, unquote(message))
+        File.Only.Logger.Agent.log(:warn, unquote(message))
       end
     end
   end
@@ -66,7 +66,7 @@ defmodule File.Only.Logger do
   defmacro error(event, variables, do: message) do
     quote do
       def error(unquote(event), unquote(variables)) do
-        File.Only.Logger.Proxy.log(:error, unquote(message))
+        File.Only.Logger.Agent.log(:error, unquote(message))
       end
     end
   end

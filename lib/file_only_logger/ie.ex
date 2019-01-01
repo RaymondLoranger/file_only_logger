@@ -32,7 +32,7 @@ defmodule File.Only.Logger.IE do
       import unquote(__MODULE__)
       alias unquote(__MODULE__)
       alias File.Only.Logger
-      alias File.Only.Logger.Proxy
+      alias File.Only.Logger.Agent
       :ok
     end
   end
