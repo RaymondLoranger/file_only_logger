@@ -1,7 +1,16 @@
 defmodule File.Only.Logger do
-  defmacro __using__(_options) do
-    quote do
-      import unquote(__MODULE__)
+  defmacro __using__(options) do
+    alias = options[:alias]
+
+    if alias do
+      quote do
+        alias unquote(__MODULE__), as: unquote(alias)
+        require unquote(alias)
+      end
+    else
+      quote do
+        import unquote(__MODULE__)
+      end
     end
   end
 
@@ -15,8 +24,7 @@ defmodule File.Only.Logger do
 
   @doc ~S'''
   Injects function `info` within the caller's context.
-
-  This function will write a formatted message to the configured info log file.
+  The function will write a formatted message to the configured info log file.
 
   ## Examples
 
@@ -48,8 +56,7 @@ defmodule File.Only.Logger do
 
   @doc ~S'''
   Injects function `error` within the caller's context.
-
-  This function will write a formatted message to the configured error log file.
+  The function will write a formatted message to the configured error log file.
 
   ## Examples
 

@@ -9,7 +9,7 @@ defmodule File.Only.Logger.Agent do
   ## Private functions
 
   @spec log? :: boolean
-  defp log?, do: Application.get_env(@app, :log?) || false
+  defp log?, do: Application.get_env(@app, :log?, false)
 
   @spec log(atom, String.t(), boolean) :: :ok
   defp log(_level, _message, false = _log?), do: :ok
