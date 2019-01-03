@@ -1,6 +1,6 @@
 # File Only Logger
 
-A simple logger which writes formatted messages to files only (not to the console).
+A simple logger which writes messages to files only (not to the console).
 
 ## Installation
 
