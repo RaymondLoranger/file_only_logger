@@ -4,10 +4,10 @@ defmodule File.Only.Logger.MixProject do
   def project do
     [
       app: :file_only_logger,
-      version: "0.1.0",
+      version: "0.1.3",
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
-      name: "File Only Logger",
+      name: "File-Only Logger",
       source_url: source_url(),
       description: description(),
       package: package(),

@@ -1,4 +1,4 @@
-# File Only Logger
+# File-Only Logger
 
 A simple logger which writes messages to files only (not to the console).
 
