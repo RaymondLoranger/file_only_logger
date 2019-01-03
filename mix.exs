@@ -7,7 +7,30 @@ defmodule File.Only.Logger.MixProject do
       version: "0.1.0",
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
+      name: "File Only Logger",
+      source_url: source_url(),
+      description: description(),
+      package: package(),
       deps: deps()
+    ]
+  end
+
+  defp source_url do
+    "https://github.com/RaymondLoranger/file_only_logger"
+  end
+
+  defp description do
+    """
+    A simple logger which writes messages to files only (not to the console).
+    """
+  end
+
+  defp package do
+    [
+      files: ["lib", "mix.exs", "README*", "config/persist*.exs"],
+      maintainers: ["Raymond Loranger"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => source_url()}
     ]
   end
 
