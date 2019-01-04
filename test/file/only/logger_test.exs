@@ -3,16 +3,16 @@ defmodule Log do
 
   warn :low_points, {player} do
     """
-    \nCareful #{player.name}:
+    \nCareful #{player.name}...
     • Points left: #{player.points}
     """
   end
 
   info :joined_game, {player, game} do
     """
-    \nNote that #{player.name}:
-    • Has joined game #{inspect(game.name)}
-    • Game state: #{inspect(game.state)}
+    \nNote that #{player.name}...
+    • Has joined game: #{inspect(game.name, pretty: true)}
+    • Game state: #{inspect(game.state, pretty: true)}
     """
   end
 end
@@ -42,7 +42,7 @@ defmodule File.Only.LoggerTest do
 
       assert File.read!(warn_path) =~ """
              [warn]\s\s
-             Careful Anthony:
+             Careful Anthony...
              • Points left: 43
              """
     end
@@ -57,8 +57,8 @@ defmodule File.Only.LoggerTest do
 
       assert File.read!(info_path) =~ """
              [info]\s\s
-             Note that Anthony:
-             • Has joined game "skyfall"
+             Note that Anthony...
+             • Has joined game: "skyfall"
              • Game state: :ongoing
              """
     end

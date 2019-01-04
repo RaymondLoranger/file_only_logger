@@ -32,9 +32,9 @@ defmodule File.Only.Logger do
 
       info :game_state, {player, game} do
         """
-        \nNote that #{player.name}:
-        • Has joined game #{inspect(game.name)}
-        • Game state: #{inspect(game.state)}
+        \nNote that #{player.name}...
+        • Has joined game #{inspect(game.name, pretty: true)}
+        • Game state: #{inspect(game.state, pretty: true)}
         """
       end
   '''
@@ -64,9 +64,9 @@ defmodule File.Only.Logger do
 
       error :exit, {reason} do
         """
-        \n'exit' caught:
+        \n'exit' caught...
         • Reason:
-        #{inspect(reason)}
+          #{inspect(reason, pretty: true)}
         """
       end
   '''

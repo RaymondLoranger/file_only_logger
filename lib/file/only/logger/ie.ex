@@ -5,17 +5,19 @@ defmodule GenLog do
 
   error :exit, {reason} do
     """
-    \n'exit' caught:
+    \n'exit' caught...
     • Reason:
-    #{inspect(reason)}
+      #{inspect(reason, pretty: true)}
     """
   end
 
   info :save, {game} do
     """
-    \nServer #{game.name |> via() |> inspect()} #{self() |> inspect()}:
-    • game being saved:
-    #{inspect(game, pretty: true)}
+    \nSaving game...
+    • Server:
+      #{game.name |> via() |> inspect(pretty: true)}
+    • Game being saved:
+      #{inspect(game, pretty: true)}
     """
   end
 
