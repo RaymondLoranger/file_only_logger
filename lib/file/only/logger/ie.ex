@@ -29,6 +29,12 @@ end
 defmodule File.Only.Logger.IE do
   @moduledoc false
 
+  # Example of an IEx session...
+  #
+  #   use File.Only.Logger.IE
+  #   log_error # check log files
+  #   log_info # check log files
+
   defmacro __using__(_options) do
     quote do
       import unquote(__MODULE__)
