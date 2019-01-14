@@ -89,7 +89,7 @@ defmodule File.Only.Logger do
 
   defmacro lib do
     quote do
-      Mix.Project.config()[:app]
+      unquote(Mix.Project.config()[:app])
     end
   end
 
