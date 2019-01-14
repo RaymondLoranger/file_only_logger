@@ -31,6 +31,8 @@ defmodule File.Only.Logger.IE do
 
   # Example of an IEx session...
   #
+  #   iex -S mix
+  #
   #   use File.Only.Logger.IE
   #   log_error # check log files
   #   log_info # check log files

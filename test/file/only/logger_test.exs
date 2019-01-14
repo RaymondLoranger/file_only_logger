@@ -15,6 +15,26 @@ defmodule Log do
     • Game state: #{inspect(game.state, pretty: true)}
     """
   end
+
+  info :joined_game_plus, {player, game} do
+    """
+    \nNote that #{player.name}...
+    • Has joined game: #{inspect(game.name, pretty: true)}
+    • Game state: #{inspect(game.state, pretty: true)}
+    • App: #{app()}
+    • Library: #{lib()}
+    • Module: #{mod()}
+    """
+  end
+
+  info :joined_game_same, {player, game} do
+    """
+    \nNote that #{player.name}...
+    • Has joined game: #{inspect(game.name, pretty: true)}
+    • Game state: #{inspect(game.state, pretty: true)}
+    #{from()}
+    """
+  end
 end
 
 defmodule File.Only.LoggerTest do
@@ -60,6 +80,40 @@ defmodule File.Only.LoggerTest do
              Note that Anthony...
              • Has joined game: "skyfall"
              • Game state: :ongoing
+             """
+    end
+
+    test "logs other info message", %{players: players, games: games} do
+      info_path = Application.get_env(:logger, :info_log)[:path]
+      Log.Reset.clear_log(info_path)
+      Log.info(:joined_game_plus, {players.anthony, games.skyfall})
+      Process.sleep(100)
+
+      assert File.read!(info_path) =~ """
+             [info]\s\s
+             Note that Anthony...
+             • Has joined game: "skyfall"
+             • Game state: :ongoing
+             • App: undefined
+             • Library: file_only_logger
+             • Module: Log
+             """
+    end
+
+    test "logs same info message", %{players: players, games: games} do
+      info_path = Application.get_env(:logger, :info_log)[:path]
+      Log.Reset.clear_log(info_path)
+      Log.info(:joined_game_same, {players.anthony, games.skyfall})
+      Process.sleep(100)
+
+      assert File.read!(info_path) =~ """
+             [info]\s\s
+             Note that Anthony...
+             • Has joined game: "skyfall"
+             • Game state: :ongoing
+             • App: undefined
+             • Library: file_only_logger
+             • Module: Log
              """
     end
   end

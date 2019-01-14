@@ -77,4 +77,35 @@ defmodule File.Only.Logger do
       end
     end
   end
+
+  defmacro app do
+    quote do
+      case :application.get_application() do
+        {:ok, app} -> app
+        :undefined -> :undefined
+      end
+    end
+  end
+
+  defmacro lib do
+    quote do
+      Mix.Project.config()[:app]
+    end
+  end
+
+  defmacro mod do
+    quote do
+      "#{inspect(__MODULE__)}"
+    end
+  end
+
+  defmacro from do
+    quote do
+      """
+      • App: #{app()}
+      • Library: #{lib()}
+      • Module: #{mod()}
+      """
+    end
+  end
 end
