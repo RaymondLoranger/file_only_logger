@@ -1,4 +1,4 @@
-defmodule GenLog do
+defmodule File.Only.Logger.IE.Log do
   @moduledoc false
 
   use File.Only.Logger
@@ -34,14 +34,17 @@ defmodule File.Only.Logger.IE do
   #   iex -S mix
   #
   #   use File.Only.Logger.IE
-  #   log_error # check log files
-  #   log_info # check log files
+  #   log_error # And then check log files
+  #   log_info # And then check log files
+
+  alias __MODULE__.Log
 
   defmacro __using__(_options) do
     quote do
       import unquote(__MODULE__)
       alias unquote(__MODULE__)
-      alias File.Only.Logger.Agent
+      alias unquote(__MODULE__).Log
+      alias File.Only.Logger.Proxy
       alias File.Only.Logger
       :ok
     end
@@ -49,11 +52,11 @@ defmodule File.Only.Logger.IE do
 
   @spec log_error :: :ok
   def log_error() do
-    GenLog.error(:exit, {{:already_started, self() |> inspect()}})
+    Log.error(:exit, {{:already_started, self() |> inspect()}})
   end
 
   @spec log_info :: :ok
   def log_info() do
-    GenLog.info(:save, {%{name: "blue-moon", state: :exciting}})
+    Log.info(:save, {%{name: "blue-moon", state: :exciting}})
   end
 end
