@@ -149,7 +149,6 @@ defmodule File.Only.LoggerTest do
              Application environment:
              • For app: file_only_logger
              • Key-value pairs:
-               [log?: true, env: :test]
              """
     end
   end
