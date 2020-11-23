@@ -50,7 +50,7 @@ defmodule File.Only.LoggerTest do
   use ExUnit.Case, async: true
 
   alias File.Only.Logger
-  # Due to common 'Log' part, these 2 aliases must be in this order...
+  # Given the common 'Log' part, these 2 aliases must be in this order...
   alias Log.Reset.ConfigPaths
   alias File.Only.LoggerTest.Log
 

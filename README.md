@@ -14,7 +14,17 @@ def deps do
 end
 ```
 
-## Usage example
+## Usage
+
+You can use file `config/runtime.exs` to prevent any logging:
+
+```elixir
+import Config
+
+config :file_only_logger, log?: false
+```
+
+#### Example
 
 ```elixir
 defmodule Log do
