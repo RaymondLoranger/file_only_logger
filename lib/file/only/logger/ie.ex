@@ -7,7 +7,7 @@ defmodule File.Only.Logger.IE.Log do
     """
     \n'exit' caught...
     • Reason:
-      #{inspect(reason, pretty: true)}
+      #{inspect(reason)}
     """
   end
 
@@ -15,9 +15,9 @@ defmodule File.Only.Logger.IE.Log do
     """
     \nSaving game...
     • Server:
-      #{game.name |> via() |> inspect(pretty: true)}
+      #{game.name |> via() |> inspect()}
     • Game being saved:
-      #{inspect(game, pretty: true)}
+      #{inspect(game)}
     """
   end
 

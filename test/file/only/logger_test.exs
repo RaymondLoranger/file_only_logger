@@ -11,16 +11,16 @@ defmodule File.Only.LoggerTest.Log do
   info :joined_game, {player, game} do
     """
     \nNote that #{player.name}...
-    • Has joined game: #{inspect(game.name, pretty: true)}
-    • Game state: #{inspect(game.state, pretty: true)}
+    • Has joined game: #{inspect(game.name)}
+    • Game state: #{inspect(game.state)}
     """
   end
 
   info :joined_game_plus, {player, game} do
     """
     \nNote that #{player.name}...
-    • Has joined game: #{inspect(game.name, pretty: true)}
-    • Game state: #{inspect(game.state, pretty: true)}
+    • Has joined game: #{inspect(game.name)}
+    • Game state: #{inspect(game.state)}
     • App: #{app()}
     • Library: #{lib()}
     • Module: #{mod()}
@@ -30,8 +30,8 @@ defmodule File.Only.LoggerTest.Log do
   info :joined_game_from, {player, game} do
     """
     \nNote that #{player.name}...
-    • Has joined game: #{inspect(game.name, pretty: true)}
-    • Game state: #{inspect(game.state, pretty: true)}
+    • Has joined game: #{inspect(game.name)}
+    • Game state: #{inspect(game.state)}
     #{from()}
     """
   end
@@ -41,7 +41,7 @@ defmodule File.Only.LoggerTest.Log do
     \nApplication environment:
     • For app: #{app}
     • Key-value pairs:
-      #{inspect(all_env, pretty: true)}
+      #{inspect(all_env)}
     """
   end
 end
@@ -51,14 +51,12 @@ defmodule File.Only.LoggerTest do
 
   alias File.Only.Logger
   # Due to common 'Log' part, these 2 aliases must be in this order...
-  alias Log.Reset
+  alias Log.Reset.ConfigPaths
   alias File.Only.LoggerTest.Log
 
   doctest Logger
 
   setup_all do
-    Application.put_env(:file_only_logger, :log?, true)
-
     anthony = %{name: "Anthony", points: 43}
     stephan = %{name: "Stephan", points: 34}
     raymond = %{name: "Raymond", points: 56}
@@ -66,17 +64,10 @@ defmodule File.Only.LoggerTest do
     anthony = %{name: ANTHONY, state: :on_going, player: anthony}
     stephan = %{name: STEPHAN, state: :starting, player: stephan}
     raymond = %{name: RAYMOND, state: :stopping, player: raymond}
+
     games = %{anthony: anthony, stephan: stephan, raymond: raymond}
-
-    info_path = Application.get_env(:logger, :info_log)[:path]
-    warn_path = Application.get_env(:logger, :warn_log)[:path]
-    error_path = Application.get_env(:logger, :error_log)[:path]
-    paths = %{info: info_path, warn: warn_path, error: error_path}
-
-    Reset.clear_log(info_path)
-    Reset.clear_log(warn_path)
-    Reset.clear_log(error_path)
-
+    paths = ConfigPaths.new()
+    ConfigPaths.clear_logs(paths, :all)
     %{games: games, paths: paths}
   end
 

@@ -14,9 +14,9 @@ defmodule File.Only.Logger do
     end
   end
 
-  defmacro debug(event, variables, do: message) do
+  defmacro debug(message_id, variables, do: message) do
     quote do
-      def debug(unquote(event), unquote(variables)) do
+      def debug(unquote(message_id), unquote(variables)) do
         File.Only.Logger.Proxy.log(:debug, unquote(message))
       end
     end
@@ -34,22 +34,22 @@ defmodule File.Only.Logger do
       info :game_state, {player, game} do
         """
         \nNote that #{player.name}...
-        • Has joined game #{inspect(game.name, pretty: true)}
-        • Game state: #{inspect(game.state, pretty: true)}
+        • Has joined game #{inspect(game.name)}
+        • Game state: #{inspect(game.state)}
         """
       end
   '''
-  defmacro info(event, variables, do: message) do
+  defmacro info(message_id, variables, do: message) do
     quote do
-      def info(unquote(event), unquote(variables)) do
+      def info(unquote(message_id), unquote(variables)) do
         File.Only.Logger.Proxy.log(:info, unquote(message))
       end
     end
   end
 
-  defmacro warn(event, variables, do: message) do
+  defmacro warn(message_id, variables, do: message) do
     quote do
-      def warn(unquote(event), unquote(variables)) do
+      def warn(unquote(message_id), unquote(variables)) do
         File.Only.Logger.Proxy.log(:warn, unquote(message))
       end
     end
@@ -68,13 +68,13 @@ defmodule File.Only.Logger do
         """
         \n'exit' caught...
         • Reason:
-          #{inspect(reason, pretty: true)}
+          #{inspect(reason)}
         """
       end
   '''
-  defmacro error(event, variables, do: message) do
+  defmacro error(message_id, variables, do: message) do
     quote do
-      def error(unquote(event), unquote(variables)) do
+      def error(unquote(message_id), unquote(variables)) do
         File.Only.Logger.Proxy.log(:error, unquote(message))
       end
     end

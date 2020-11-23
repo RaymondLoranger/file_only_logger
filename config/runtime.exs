@@ -1,7 +1,8 @@
 import Config
 
-config :file_only_logger, log?: config_env() in [:prod, :dev]
+# Should be configured in the parent app...
+# config :file_only_logger, log?: false
 
 # For testing purposes only...
-config :file_only_logger, env: "*** #{config_env()} ***"
-config :file_only_logger, runtime?: :yes_indeed
+config :file_only_logger,
+  env: "#{config_env()} ➔ from #{Path.relative_to_cwd(__ENV__.file)}"
