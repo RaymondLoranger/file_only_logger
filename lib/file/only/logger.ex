@@ -80,11 +80,12 @@ defmodule File.Only.Logger do
     end
   end
 
-  @spec app :: atom
-  def app do
-    case :application.get_application() do
-      {:ok, app} -> app
-      :undefined -> :undefined
+  defmacro app do
+    quote do
+      case :application.get_application() do
+        {:ok, app} -> app
+        :undefined -> :undefined
+      end
     end
   end
 
