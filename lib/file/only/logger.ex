@@ -14,6 +14,8 @@ defmodule File.Only.Logger do
     end
   end
 
+  defmacro debug(message_id, variables, do_block)
+
   defmacro debug(message_id, variables, do: message) do
     quote do
       def debug(unquote(message_id), unquote(variables)) do
@@ -39,6 +41,8 @@ defmodule File.Only.Logger do
         """
       end
   '''
+  defmacro info(message_id, variables, do_block)
+
   defmacro info(message_id, variables, do: message) do
     quote do
       def info(unquote(message_id), unquote(variables)) do
@@ -46,6 +50,8 @@ defmodule File.Only.Logger do
       end
     end
   end
+
+  defmacro warn(message_id, variables, do_block)
 
   defmacro warn(message_id, variables, do: message) do
     quote do
@@ -72,6 +78,8 @@ defmodule File.Only.Logger do
         """
       end
   '''
+  defmacro error(message_id, variables, do_block)
+
   defmacro error(message_id, variables, do: message) do
     quote do
       def error(unquote(message_id), unquote(variables)) do
