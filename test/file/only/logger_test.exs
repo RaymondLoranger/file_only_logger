@@ -50,8 +50,6 @@ defmodule File.Only.LoggerTest do
   use ExUnit.Case, async: true
 
   alias File.Only.Logger
-  # Given the common 'Log' part, these 2 aliases must be in this order...
-  alias Log.Reset.ConfigPaths
   alias File.Only.LoggerTest.Log
 
   doctest Logger
@@ -66,8 +64,12 @@ defmodule File.Only.LoggerTest do
     raymond = %{name: RAYMOND, state: :stopping, player: raymond}
 
     games = %{anthony: anthony, stephan: stephan, raymond: raymond}
-    paths = ConfigPaths.new()
-    ConfigPaths.clear_logs(paths, :all)
+
+    paths = %{
+      warn: Application.get_env(:logger, :warn_log)[:path],
+      info: Application.get_env(:logger, :info_log)[:path]
+    }
+
     %{games: games, paths: paths}
   end
 

@@ -1,7 +1,7 @@
 import Config
 
 # Should be configured in the parent app...
-# config :file_only_logger, log?: false
+# config :file_only_logger, log?: true
 
 # For testing purposes only...
 config :file_only_logger,
