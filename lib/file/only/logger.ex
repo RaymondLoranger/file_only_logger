@@ -51,6 +51,26 @@ defmodule File.Only.Logger do
     end
   end
 
+  defmacro notice(message_id, variables, do_block)
+
+  defmacro notice(message_id, variables, do: message) do
+    quote do
+      def notice(unquote(message_id), unquote(variables)) do
+        File.Only.Logger.Proxy.log(:notice, unquote(message))
+      end
+    end
+  end
+
+  defmacro warning(message_id, variables, do_block)
+
+  defmacro warning(message_id, variables, do: message) do
+    quote do
+      def warning(unquote(message_id), unquote(variables)) do
+        File.Only.Logger.Proxy.log(:warning, unquote(message))
+      end
+    end
+  end
+
   defmacro warn(message_id, variables, do_block)
 
   defmacro warn(message_id, variables, do: message) do
@@ -84,6 +104,36 @@ defmodule File.Only.Logger do
     quote do
       def error(unquote(message_id), unquote(variables)) do
         File.Only.Logger.Proxy.log(:error, unquote(message))
+      end
+    end
+  end
+
+  defmacro critical(message_id, variables, do_block)
+
+  defmacro critical(message_id, variables, do: message) do
+    quote do
+      def critical(unquote(message_id), unquote(variables)) do
+        File.Only.Logger.Proxy.log(:critical, unquote(message))
+      end
+    end
+  end
+
+  defmacro alert(message_id, variables, do_block)
+
+  defmacro alert(message_id, variables, do: message) do
+    quote do
+      def alert(unquote(message_id), unquote(variables)) do
+        File.Only.Logger.Proxy.log(:alert, unquote(message))
+      end
+    end
+  end
+
+  defmacro emergency(message_id, variables, do_block)
+
+  defmacro emergency(message_id, variables, do: message) do
+    quote do
+      def emergency(unquote(message_id), unquote(variables)) do
+        File.Only.Logger.Proxy.log(:emergency, unquote(message))
       end
     end
   end

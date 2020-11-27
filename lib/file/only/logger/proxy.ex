@@ -3,7 +3,7 @@ defmodule File.Only.Logger.Proxy do
 
   require Logger
 
-  @spec log(atom, String.t()) :: :ok
+  @spec log(Logger.level(), String.t()) :: :ok
   def log(level, message), do: log(level, message, log?())
 
   ## Private functions
@@ -11,7 +11,7 @@ defmodule File.Only.Logger.Proxy do
   @spec log? :: boolean
   defp log?, do: get_env(:log?, true)
 
-  @spec log(atom, String.t(), boolean) :: :ok
+  @spec log(Logger.level(), String.t(), boolean) :: :ok
   defp log(level, message, true = _log?) do
     removed = Logger.remove_backend(:console, flush: true)
     Logger.log(level, message)
