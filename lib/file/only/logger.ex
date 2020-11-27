@@ -27,7 +27,8 @@ defmodule File.Only.Logger do
   @doc ~S'''
   Injects function `info` within the caller's context.
 
-  The function will write a `message` to the configured info log file.
+  The function will write the `message` returned by the `do_block`
+  to the configured info log file.
 
   ## Examples
 
@@ -84,7 +85,8 @@ defmodule File.Only.Logger do
   @doc ~S'''
   Injects function `error` within the caller's context.
 
-  The function will write a `message` to the configured error log file.
+  The function will write the `message` returned by the `do_block`
+  to the configured error log file.
 
   ## Examples
 
