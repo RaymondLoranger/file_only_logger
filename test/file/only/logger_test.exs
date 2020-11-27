@@ -65,10 +65,19 @@ defmodule File.Only.LoggerTest do
 
     games = %{anthony: anthony, stephan: stephan, raymond: raymond}
 
+    # %{debug: "./log/debug.log", info: "./log/info.log", ...}
     paths = %{
+      debug: Application.get_env(:logger, :debug_log)[:path],
+      info: Application.get_env(:logger, :info_log)[:path],
       warn: Application.get_env(:logger, :warn_log)[:path],
-      info: Application.get_env(:logger, :info_log)[:path]
+      error: Application.get_env(:logger, :error_log)[:path]
     }
+
+    # Clear each log file...
+    paths
+    |> Map.values()
+    |> Enum.reject(&is_nil/1)
+    |> Enum.each(&File.write(&1, ""))
 
     %{games: games, paths: paths}
   end

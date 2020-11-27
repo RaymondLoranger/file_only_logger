@@ -16,11 +16,10 @@ end
 
 ## Usage
 
-You can use file `config/runtime.exs` to prevent any logging:
+You can use file `config/runtime.exs` to prevent file logging:
 
 ```elixir
 import Config
-
 config :file_only_logger, log?: false
 ```
 

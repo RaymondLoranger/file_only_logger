@@ -8,6 +8,7 @@ defmodule File.Only.Logger.IE.Log do
     \n'exit' caught...
     • Reason:
       #{inspect(reason)}
+    #{from()}
     """
   end
 
@@ -18,6 +19,7 @@ defmodule File.Only.Logger.IE.Log do
       #{game.name |> via() |> inspect()}
     • Game being saved:
       #{inspect(game)}
+    #{from()}
     """
   end
 
@@ -52,7 +54,7 @@ defmodule File.Only.Logger.IE do
 
   @spec log_error :: :ok
   def log_error() do
-    Log.error(:exit, {{:already_started, self() |> inspect()}})
+    Log.error(:exit, {{:already_started, self()}})
   end
 
   @spec log_info :: :ok
