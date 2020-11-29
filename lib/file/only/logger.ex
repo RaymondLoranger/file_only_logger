@@ -140,6 +140,37 @@ defmodule File.Only.Logger do
     end
   end
 
+  @doc ~S'''
+  Returns string "module.function/arity" for the given `environment`.
+
+  ## Examples
+
+      use File.Only.Logger
+
+      error :exit, {reason, env} do
+        """
+        \n'exit' caught...
+        • Reason:
+          #{inspect(reason)}
+        • Inside function:
+          #{fun(env)}
+        """
+      end
+  '''
+  defmacro fun(env) do
+    quote bind_quoted: [env: env] do
+      case env do
+        %Macro.Env{function: {name, arity}} ->
+          if name |> to_string() |> String.contains?(" "),
+            do: "#{inspect(env.module)}.'#{name}'/#{arity}",
+            else: "#{inspect(env.module)}.#{name}/#{arity}"
+
+        %Macro.Env{function: nil} ->
+          "'not inside a function'"
+      end
+    end
+  end
+
   defmacro app do
     quote do
       case :application.get_application() do

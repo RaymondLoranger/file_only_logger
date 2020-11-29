@@ -48,11 +48,14 @@ defmodule File.Only.LoggerTest.Log do
     """
   end
 
-  info :joined_game, {player, game} do
+  info :joined_game, {player, game, env} do
     """
     \nNote that #{player.name}...
     • Has joined game: #{inspect(game.name)}
     • Game state: #{inspect(game.state)}
+    • Inside function:
+      #{fun(env)}
+    #{from()}
     """
   end
 
@@ -197,7 +200,7 @@ defmodule File.Only.LoggerTest do
 
   describe "Log.info/2" do
     test "logs an info message", %{games: games, paths: paths} do
-      Log.info(:joined_game, {games.stephan.player, games.stephan})
+      Log.info(:joined_game, {games.stephan.player, games.stephan, __ENV__})
       Process.sleep(222)
 
       assert File.read!(paths.info) =~ """
@@ -205,6 +208,11 @@ defmodule File.Only.LoggerTest do
              Note that Stephan...
              • Has joined game: STEPHAN
              • Game state: :starting
+             • Inside function:
+               File.Only.LoggerTest.'test Log.info/2 logs an info message'/1
+             • App: undefined
+             • Library: file_only_logger
+             • Module: File.Only.LoggerTest.Log
              """
     end
 
