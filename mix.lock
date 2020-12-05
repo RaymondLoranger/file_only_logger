@@ -8,5 +8,5 @@
   "makeup_elixir": {:hex, :makeup_elixir, "0.15.0", "98312c9f0d3730fde4049985a1105da5155bfe5c11e47bdc7406d88e01e4219b", [:mix], [{:makeup, "~> 1.0", [hex: :makeup, repo: "hexpm", optional: false]}, {:nimble_parsec, "~> 1.1", [hex: :nimble_parsec, repo: "hexpm", optional: false]}], "hexpm", "75ffa34ab1056b7e24844c90bfc62aaf6f3a37a15faa76b07bc5eba27e4a8b4a"},
   "mix_tasks": {:git, "https://github.com/RaymondLoranger/mix_tasks.git", "986e0e68b4df5984beda100fd8c2a9bfb4bd8c63", []},
   "nimble_parsec": {:hex, :nimble_parsec, "1.1.0", "3a6fca1550363552e54c216debb6a9e95bd8d32348938e13de5eda962c0d7f89", [:mix], [], "hexpm", "08eb32d66b706e913ff748f11694b17981c0b04a33ef470e33e11b3d3ac8f54b"},
-  "persist_config": {:hex, :persist_config, "0.4.13", "b31895cbb98c22400d4c9f0d76cffc901e93e712b14e76178484927eb27ed403", [:mix], [], "hexpm", "50e8732954030fc290f3a75c3409787d4cac926be03e3ba614d5caa803097c7f"},
+  "persist_config": {:hex, :persist_config, "0.4.14", "4be52300f6d55a5a54499152004f0ba415f2b5108d920f636d84f57f525b32eb", [:mix], [], "hexpm", "43380847d59e5570a3ab6ddd30baac3279495fbfd2613a2498fab6f835958e33"},
 }
