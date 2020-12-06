@@ -17,7 +17,6 @@ defmodule File.Only.Logger.Proxy do
   defp log(level, message, true = _log?) do
     removed = Logger.remove_backend(:console, flush: @flush)
     :ok = Logger.log(level, message)
-    :ok = Logger.flush()
     if removed == :ok, do: Logger.add_backend(:console, flush: @flush)
     :ok
   end
