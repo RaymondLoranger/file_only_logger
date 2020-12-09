@@ -120,7 +120,7 @@ defmodule File.Only.LoggerTest do
     paths
     |> Map.values()
     |> Enum.reject(&is_nil/1)
-    |> Enum.each(&File.write(&1, ""))
+    |> Enum.each(&File.rm/1)
 
     %{games: games, paths: paths}
   end

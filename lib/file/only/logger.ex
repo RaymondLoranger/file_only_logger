@@ -1,4 +1,21 @@
 defmodule File.Only.Logger do
+  @moduledoc """
+  A simple logger which writes messages to log files only (not to the console).
+  """
+
+  @doc """
+  Either aliases `File.Only.Logger` (this module) and requires the alias or
+  imports `File.Only.Logger`. In the latter case, you could instead simply
+  `import File.Only.Logger`.
+
+  ## Examples
+
+      use File.Only.Logger, alias: FileLogger
+
+      use File.Only.Logger
+
+      import File.Only.Logger
+  """
   defmacro __using__(options) do
     alias = options[:alias]
 
@@ -141,7 +158,8 @@ defmodule File.Only.Logger do
   end
 
   @doc ~S'''
-  Returns string "module.function/arity" for the given `environment`.
+  Returns string "<module>.<function>/<arity>" for the given
+  [environment](`t:Macro.Env.t/0`) (`__ENV__` or `__CALLER__`).
 
   ## Examples
 
