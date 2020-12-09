@@ -159,7 +159,7 @@ defmodule File.Only.Logger do
 
   @doc ~S'''
   Returns string "<module>.<function>/<arity>" e.g. "My.Math.sqrt/1"
-  for the given [environment](`Macro.Env.`) (`__ENV__` or `__CALLER__`).
+  for the given [environment](`Macro.Env`).
 
   ## Examples
 
