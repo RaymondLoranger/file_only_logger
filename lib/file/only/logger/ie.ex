@@ -16,7 +16,7 @@ defmodule File.Only.Logger.IE.Log do
     """
     \nSaving game...
     • Server:
-      #{game.name |> via() |> inspect()}
+      #{via(game.name) |> inspect()}
     • Game being saved:
       #{inspect(game)}
     #{from()}

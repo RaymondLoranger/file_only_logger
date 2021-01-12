@@ -179,7 +179,7 @@ defmodule File.Only.Logger do
     quote bind_quoted: [env: env] do
       case env do
         %Macro.Env{function: {name, arity}} ->
-          if name |> to_string() |> String.contains?(" "),
+          if to_string(name) |> String.contains?(" "),
             do: "#{inspect(env.module)}.'#{name}'/#{arity}",
             else: "#{inspect(env.module)}.#{name}/#{arity}"
 
