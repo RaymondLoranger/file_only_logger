@@ -193,7 +193,7 @@ defmodule File.Only.Logger do
     quote do
       case :application.get_application() do
         {:ok, app} -> app
-        :undefined -> :undefined
+        :undefined -> Application.get_application(__MODULE__) || :undefined
       end
     end
   end
