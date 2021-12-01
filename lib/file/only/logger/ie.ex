@@ -3,23 +3,23 @@ defmodule File.Only.Logger.IE.Log do
 
   use File.Only.Logger
 
-  error :exit, {reason} do
+  error :exit, {reason, env} do
     """
     \n'exit' caught...
     • Reason:
       #{inspect(reason)}
-    #{from()}
+    #{from(env)}
     """
   end
 
-  info :save, {game} do
+  info :save, {game, env} do
     """
     \nSaving game...
     • Server:
       #{via(game.name) |> inspect()}
     • Game being saved:
       #{inspect(game)}
-    #{from()}
+    #{from(env)}
     """
   end
 
@@ -44,21 +44,24 @@ defmodule File.Only.Logger.IE do
   defmacro __using__(_options) do
     quote do
       import unquote(__MODULE__)
+      import File.Only.Logger
+
       alias unquote(__MODULE__)
       alias unquote(__MODULE__).Log
       alias File.Only.Logger.Proxy
       alias File.Only.Logger
+
       :ok
     end
   end
 
   @spec log_error :: :ok
-  def log_error() do
-    Log.error(:exit, {{:already_started, self()}})
+  def log_error do
+    Log.error(:exit, {{:already_started, self()}, __ENV__})
   end
 
   @spec log_info :: :ok
-  def log_info() do
-    Log.info(:save, {%{name: "blue-moon", state: :exciting}})
+  def log_info do
+    Log.info(:save, {%{name: "blue-moon", state: :exciting}, __ENV__})
   end
 end

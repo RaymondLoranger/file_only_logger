@@ -53,13 +53,11 @@ defmodule File.Only.LoggerTest.Log do
     \nNote that #{player.name}...
     • Has joined game: #{inspect(game.name)}
     • Game state: #{inspect(game.state)}
-    • Inside function:
-      #{fun(env)}
-    #{from()}
+    #{from(env)}
     """
   end
 
-  info :joined_game_plus, {player, game} do
+  info :joined_game_also, {player, game} do
     """
     \nNote that #{player.name}...
     • Has joined game: #{inspect(game.name)}
@@ -70,12 +68,12 @@ defmodule File.Only.LoggerTest.Log do
     """
   end
 
-  info :joined_game_from, {player, game} do
+  info :joined_game_too, {player, game, env} do
     """
     \nNote that #{player.name}...
     • Has joined game: #{inspect(game.name)}
     • Game state: #{inspect(game.state)}
-    #{from()}
+    #{from(env)}
     """
   end
 
@@ -208,16 +206,15 @@ defmodule File.Only.LoggerTest do
              Note that Stephan...
              • Has joined game: STEPHAN
              • Game state: :starting
-             • Inside function:
-               File.Only.LoggerTest.'test Log.info/2 logs an info message'/1
              • App: undefined
              • Library: file_only_logger
              • Module: File.Only.LoggerTest.Log
+             • Function: File.Only.LoggerTest.'test Log.info/2 logs an info message'/1
              """
     end
 
     test "logs other info message", %{games: games, paths: paths} do
-      Log.info(:joined_game_plus, {games.raymond.player, games.raymond})
+      Log.info(:joined_game_also, {games.raymond.player, games.raymond})
       Process.sleep(222)
 
       assert File.read!(paths.info) =~ """
@@ -232,7 +229,7 @@ defmodule File.Only.LoggerTest do
     end
 
     test "logs similar info message", %{games: games, paths: paths} do
-      Log.info(:joined_game_from, {games.anthony.player, games.anthony})
+      Log.info(:joined_game_too, {games.anthony.player, games.anthony, __ENV__})
       Process.sleep(222)
 
       assert File.read!(paths.info) =~ """
@@ -243,6 +240,7 @@ defmodule File.Only.LoggerTest do
              • App: undefined
              • Library: file_only_logger
              • Module: File.Only.LoggerTest.Log
+             • Function: File.Only.LoggerTest.'test Log.info/2 logs similar info message'/1
              """
     end
 

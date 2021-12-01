@@ -13,11 +13,27 @@ defmodule File.Only.Logger.Proxy do
 
   @spec log(Logger.level(), String.t(), boolean) :: :ok
   defp log(level, message, true = _log?) do
-    removed = Logger.remove_backend(:console, flush: true)
+    removed =
+      case Logger.remove_backend(:console, flush: true) do
+        :ok -> :ok
+        error -> log(error)
+      end
+
     :ok = Logger.log(level, message)
     if removed == :ok, do: Logger.add_backend(:console, flush: true)
     :ok
   end
 
   defp log(_level, _message, _log?), do: :ok
+
+  @spec log(tuple) :: tuple
+  defp log({:error, term} = error) do
+    Logger.error("""
+    \nError calling 'Logger.remove_backend/2':
+    • Error:
+      #{inspect(term)}
+    """)
+
+    error
+  end
 end

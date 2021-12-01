@@ -210,12 +210,13 @@ defmodule File.Only.Logger do
     end
   end
 
-  defmacro from do
+  defmacro from(env) do
     quote do
       """
       • App: #{app()}
       • Library: #{lib()}
       • Module: #{mod()}
+      • Function: #{fun(unquote(env))}
       """
       |> String.trim_trailing()
     end
