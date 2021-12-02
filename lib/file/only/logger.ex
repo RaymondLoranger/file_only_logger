@@ -3,6 +3,8 @@ defmodule File.Only.Logger do
   A simple logger which writes messages to log files only (not to the console).
   """
 
+  @fun_limit 66
+
   @doc """
   Either aliases `File.Only.Logger` (this module) and requires the alias or
   imports `File.Only.Logger`. In the latter case, you could instead simply
@@ -159,7 +161,8 @@ defmodule File.Only.Logger do
 
   @doc ~S'''
   Returns string "<module>.<function>/<arity>" e.g. "My.Math.sqrt/1"
-  for the given [environment](`Macro.Env`).
+  for the given [environment](`Macro.Env`).  A string longer than `limit`
+  will be prefixed with "\n  ".
 
   ## Examples
 
@@ -175,17 +178,9 @@ defmodule File.Only.Logger do
         """
       end
   '''
-  defmacro fun(env) do
-    quote bind_quoted: [env: env] do
-      case env do
-        %Macro.Env{function: {name, arity}} ->
-          if to_string(name) |> String.contains?(" "),
-            do: "#{inspect(env.module)}.'#{name}'/#{arity}",
-            else: "#{inspect(env.module)}.#{name}/#{arity}"
-
-        %Macro.Env{function: nil} ->
-          "'not inside a function'"
-      end
+  defmacro fun(env, limit \\ @fun_limit) do
+    quote do
+      File.Only.Logger.Proxy.fun(unquote(env), unquote(limit))
     end
   end
 
