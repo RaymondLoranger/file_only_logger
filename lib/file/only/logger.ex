@@ -5,6 +5,19 @@ defmodule File.Only.Logger do
 
   @fun_limit 66
 
+  # Logging levels ordered by importance or severity...
+  @levels [
+    :emergency,
+    :alert,
+    :critical,
+    :error,
+    :warning,
+    :warn,
+    :notice,
+    :info,
+    :debug
+  ]
+
   @doc """
   Either aliases `File.Only.Logger` (this module) and requires the alias or
   imports `File.Only.Logger`. In the latter case, you could instead simply
@@ -29,16 +42,6 @@ defmodule File.Only.Logger do
     else
       quote do
         import unquote(__MODULE__)
-      end
-    end
-  end
-
-  defmacro debug(message_id, variables, do_block)
-
-  defmacro debug(message_id, variables, do: message) do
-    quote do
-      def debug(unquote(message_id), unquote(variables)) do
-        File.Only.Logger.Proxy.log(:debug, unquote(message))
       end
     end
   end
@@ -71,36 +74,6 @@ defmodule File.Only.Logger do
     end
   end
 
-  defmacro notice(message_id, variables, do_block)
-
-  defmacro notice(message_id, variables, do: message) do
-    quote do
-      def notice(unquote(message_id), unquote(variables)) do
-        File.Only.Logger.Proxy.log(:notice, unquote(message))
-      end
-    end
-  end
-
-  defmacro warning(message_id, variables, do_block)
-
-  defmacro warning(message_id, variables, do: message) do
-    quote do
-      def warning(unquote(message_id), unquote(variables)) do
-        File.Only.Logger.Proxy.log(:warning, unquote(message))
-      end
-    end
-  end
-
-  defmacro warn(message_id, variables, do_block)
-
-  defmacro warn(message_id, variables, do: message) do
-    quote do
-      def warn(unquote(message_id), unquote(variables)) do
-        File.Only.Logger.Proxy.log(:warn, unquote(message))
-      end
-    end
-  end
-
   @doc ~S'''
   Injects function `error` into the caller's module.
 
@@ -114,8 +87,7 @@ defmodule File.Only.Logger do
       error :exit, {reason} do
         """
         \n'exit' caught...
-        • Reason:
-          #{inspect(reason)}
+        • Reason: #{inspect(reason)}
         """
       end
   '''
@@ -129,32 +101,16 @@ defmodule File.Only.Logger do
     end
   end
 
-  defmacro critical(message_id, variables, do_block)
+  for level <- @levels -- [:info, :error] do
+    defmacro unquote(level)(message_id, variables, do_block)
 
-  defmacro critical(message_id, variables, do: message) do
-    quote do
-      def critical(unquote(message_id), unquote(variables)) do
-        File.Only.Logger.Proxy.log(:critical, unquote(message))
-      end
-    end
-  end
+    defmacro unquote(level)(message_id, variables, do: message) do
+      level = unquote(level)
 
-  defmacro alert(message_id, variables, do_block)
-
-  defmacro alert(message_id, variables, do: message) do
-    quote do
-      def alert(unquote(message_id), unquote(variables)) do
-        File.Only.Logger.Proxy.log(:alert, unquote(message))
-      end
-    end
-  end
-
-  defmacro emergency(message_id, variables, do_block)
-
-  defmacro emergency(message_id, variables, do: message) do
-    quote do
-      def emergency(unquote(message_id), unquote(variables)) do
-        File.Only.Logger.Proxy.log(:emergency, unquote(message))
+      quote do
+        def unquote(level)(unquote(message_id), unquote(variables)) do
+          File.Only.Logger.Proxy.log(unquote(level), unquote(message))
+        end
       end
     end
   end
@@ -162,7 +118,96 @@ defmodule File.Only.Logger do
   @doc ~S'''
   Returns string "<module>.<function>/<arity>" e.g. "My.Math.sqrt/1"
   for the given [environment](`Macro.Env`).  A string longer than `limit`
-  will be prefixed with "\n  ".
+  will be prefixed with "\n\s\s".
+
+  ## Examples
+
+      use File.Only.Logger
+
+      error :exit, {reason, env} do
+        """
+        \n'exit' caught...
+        • Reason: #{inspect(reason)}
+        • Function: #{fun(env)}
+        """
+      end
+  '''
+  defmacro fun(env, limit \\ @fun_limit) do
+    quote do
+      File.Only.Logger.Proxy.fun(unquote(env), unquote(limit))
+    end
+  end
+
+  @doc ~S'''
+  Returns the application for the current process or module.
+
+  Returns `:undefined` if the current process does not belong to any application or the current module is not listed in any application spec.
+
+  ## Examples
+
+      use File.Only.Logger
+
+      error :exit, {reason} do
+        """
+        \n'exit' caught...
+        • Reason: #{inspect(reason)}
+        • App: #{app()}
+        """
+      end
+  '''
+  defmacro app do
+    quote do
+      case :application.get_application() do
+        {:ok, app} -> app
+        :undefined -> Application.get_application(__MODULE__) || :undefined
+      end
+    end
+  end
+
+  @doc ~S'''
+  Returns the current library name.
+
+  ## Examples
+
+      use File.Only.Logger
+
+      error :exit, {reason} do
+        """
+        \n'exit' caught...
+        • Reason: #{inspect(reason)}
+        • Library: #{lib()}
+        """
+      end
+  '''
+  defmacro lib do
+    quote do
+      unquote(Mix.Project.config()[:app])
+    end
+  end
+
+  @doc ~S'''
+  Returns the current module name.
+
+  ## Examples
+
+      use File.Only.Logger
+
+      error :exit, {reason} do
+        """
+        \n'exit' caught...
+        • Reason: #{inspect(reason)}
+        • Module: #{mod()}
+        """
+      end
+  '''
+  defmacro mod do
+    quote do
+      "#{inspect(__MODULE__)}"
+    end
+  end
+
+  @doc ~S'''
+  Returns a heredoc to trace the logged message back to its source using the given [environment](`Macro.Env`).
 
   ## Examples
 
@@ -173,38 +218,10 @@ defmodule File.Only.Logger do
         \n'exit' caught...
         • Reason:
           #{inspect(reason)}
-        • Inside function:
-          #{fun(env)}
+        #{from(env)}
         """
       end
   '''
-  defmacro fun(env, limit \\ @fun_limit) do
-    quote do
-      File.Only.Logger.Proxy.fun(unquote(env), unquote(limit))
-    end
-  end
-
-  defmacro app do
-    quote do
-      case :application.get_application() do
-        {:ok, app} -> app
-        :undefined -> Application.get_application(__MODULE__) || :undefined
-      end
-    end
-  end
-
-  defmacro lib do
-    quote do
-      unquote(Mix.Project.config()[:app])
-    end
-  end
-
-  defmacro mod do
-    quote do
-      "#{inspect(__MODULE__)}"
-    end
-  end
-
   defmacro from(env) do
     quote do
       """

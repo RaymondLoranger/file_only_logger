@@ -1,9 +1,10 @@
 import Config
 
-# Examples of configurations in the parent app...
+# Examples of runtime configurations in the parent app...
 #
-#   config :file_only_logger, log?: true (default)
-#   config :file_only_logger, log?: false
+#   config :file_only_logger, level: :all (default)
+#   config :file_only_logger, level: :none
+#   config :file_only_logger, level: :info
 
 # For testing purposes only...
 config :file_only_logger,

@@ -16,12 +16,18 @@ end
 
 ## Usage
 
-You can use file `config/runtime.exs` to prevent file logging:
+The configurable log levels are:
+
+- :all (default)
+- :none
+- [Logger.level()](https://hexdocs.pm/logger/Logger.html#t:level/0)
+
+You may use file `config/runtime.exs` to configure the above log level:
 
 ```elixir
 import Config
 
-config :file_only_logger, log?: false
+config :file_only_logger, level: :none
 ```
 
 #### Example
@@ -33,8 +39,7 @@ defmodule Log do
   error :error_occurred, {reason} do
     """
     \n'error' occurred...
-    • Reason:
-      '#{:file.format_error(reason)}'
+    • Reason: '#{:file.format_error(reason)}'
     """
   end
 end
