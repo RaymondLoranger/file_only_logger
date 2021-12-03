@@ -16,7 +16,7 @@ end
 
 ## Usage
 
-The configurable log levels are:
+The configuration values for log level are:
 
 - :all (default)
 - :none
