@@ -16,6 +16,9 @@ end
 
 ## Usage
 
+Trying to log any message with severity less than the configured level will
+simply cause the message to be ignored.
+
 The configuration values for log level are:
 
 - :all (default)
@@ -27,7 +30,7 @@ You may use file `config/runtime.exs` to configure the above log level:
 ```elixir
 import Config
 
-config :file_only_logger, level: :none
+config :file_only_logger, level: :info
 ```
 
 #### Example
