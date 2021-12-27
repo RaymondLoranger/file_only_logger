@@ -12,7 +12,7 @@ defmodule File.Only.Logger.MixProject do
       description: description(),
       package: package(),
       deps: deps(),
-      # See File.Only.Logger.lib/0...
+      # See File.Only.Logger.Proxy.lib/0...
       dialyzer: [plt_add_apps: [:mix]]
     ]
   end
@@ -29,7 +29,7 @@ defmodule File.Only.Logger.MixProject do
 
   defp package do
     [
-      files: ["lib", "mix.exs", "README*"],
+      files: ["lib", "mix.exs", "README*", "config/persist*.exs"],
       maintainers: ["Raymond Loranger"],
       licenses: ["MIT"],
       links: %{"GitHub" => source_url()}

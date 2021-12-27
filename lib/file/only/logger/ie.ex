@@ -6,8 +6,7 @@ defmodule File.Only.Logger.IE.Log do
   error :exit, {reason, env} do
     """
     \n'exit' caught...
-    • Reason:
-      #{inspect(reason)}
+    • Reason: #{inspect(reason) |> maybe_break(10)}
     #{from(env)}
     """
   end
@@ -15,11 +14,9 @@ defmodule File.Only.Logger.IE.Log do
   info :save, {game, env} do
     """
     \nSaving game...
-    • Server:
-      #{via(game.name) |> inspect()}
-    • Game being saved:
-      #{inspect(game)}
-    #{from(env)}
+    • Server: #{via(game.name) |> inspect() |> maybe_break(10)}
+    • Game being saved: #{inspect(game) |> maybe_break(20)}
+    #{from(env, __MODULE__)}
     """
   end
 
@@ -48,6 +45,7 @@ defmodule File.Only.Logger.IE do
 
       alias unquote(__MODULE__)
       alias unquote(__MODULE__).Log
+      alias File.Only.Logger.Log
       alias File.Only.Logger.Proxy
       alias File.Only.Logger
 
@@ -63,5 +61,7 @@ defmodule File.Only.Logger.IE do
   @spec log_info :: :ok
   def log_info do
     Log.info(:save, {%{name: "blue-moon", state: :exciting}, __ENV__})
+    game = %{name: "supercalifragilisticexpialidocious", state: :extremely_good}
+    Log.info(:save, {game, __ENV__})
   end
 end

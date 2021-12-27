@@ -3,20 +3,10 @@ defmodule File.Only.Logger do
   A simple logger which writes messages to log files only (not to the console).
   """
 
-  @fun_limit 66
+  use PersistConfig
 
-  # Logging levels ordered by importance or severity...
-  @levels [
-    :emergency,
-    :alert,
-    :critical,
-    :error,
-    :warning,
-    :warn,
-    :notice,
-    :info,
-    :debug
-  ]
+  @levels get_env(:levels)
+  @limit get_env(:limit)
 
   @doc """
   Either aliases `File.Only.Logger` (this module) and requires the alias or
@@ -47,10 +37,10 @@ defmodule File.Only.Logger do
   end
 
   @doc ~S'''
-  Injects function `info` into the caller's module.
+  Injects function `info/2` into the caller's module.
 
-  The function will write the `message` returned by the `do_block`
-  to the configured info log file.
+  The function will execute the `do_block` and write its result to the
+  configured info log file.
 
   ## Examples
 
@@ -75,10 +65,10 @@ defmodule File.Only.Logger do
   end
 
   @doc ~S'''
-  Injects function `error` into the caller's module.
+  Injects function `error/2` into the caller's module.
 
-  The function will write the `message` returned by the `do_block`
-  to the configured error log file.
+  The function will execute the `do_block` and write its result to the
+  configured error log file.
 
   ## Examples
 
@@ -116,9 +106,8 @@ defmodule File.Only.Logger do
   end
 
   @doc ~S'''
-  Returns string "<module>.<function>/<arity>" e.g. "My.Math.sqrt/1"
-  for the given [environment](`Macro.Env`).  A string longer than `limit`
-  will be prefixed with "\n\s\s".
+  Returns string "<module>.<function>/<arity>" e.g. "My.Math.sqrt/1" from the
+  given `env` (`Macro.Env`).
 
   ## Examples
 
@@ -132,16 +121,40 @@ defmodule File.Only.Logger do
         """
       end
   '''
-  defmacro fun(env, limit \\ @fun_limit) do
+  defmacro fun(env) do
     quote do
-      File.Only.Logger.Proxy.fun(unquote(env), unquote(limit))
+      File.Only.Logger.Proxy.fun(unquote(env))
+    end
+  end
+
+  @doc ~S'''
+  May prefix `string` with "\n\s\s" if longer than `limit` - `offset`.
+
+  ## Examples
+
+      use File.Only.Logger
+
+      error :exit, {reason, env} do
+        """
+        \n'exit' caught...
+        • Reason: #{inspect(reason)}
+        • Function: #{fun(env) |> maybe_break(12)}
+        """
+      end
+  '''
+  defmacro maybe_break(string, offset, limit \\ @limit) do
+    string = Macro.expand(string, __CALLER__)
+
+    quote bind_quoted: [string: string, offset: offset, limit: limit] do
+      File.Only.Logger.Proxy.maybe_break(string, offset, limit)
     end
   end
 
   @doc ~S'''
   Returns the application for the current process or module.
 
-  Returns `:undefined` if the current process does not belong to any application or the current module is not listed in any application spec.
+  Returns `:undefined` if the current process does not belong to any
+  application or the current module is not listed in any application spec.
 
   ## Examples
 
@@ -157,10 +170,7 @@ defmodule File.Only.Logger do
   '''
   defmacro app do
     quote do
-      case :application.get_application() do
-        {:ok, app} -> app
-        :undefined -> Application.get_application(__MODULE__) || :undefined
-      end
+      File.Only.Logger.Proxy.app()
     end
   end
 
@@ -181,7 +191,7 @@ defmodule File.Only.Logger do
   '''
   defmacro lib do
     quote do
-      unquote(Mix.Project.config()[:app])
+      File.Only.Logger.Proxy.lib()
     end
   end
 
@@ -202,12 +212,13 @@ defmodule File.Only.Logger do
   '''
   defmacro mod do
     quote do
-      "#{inspect(__MODULE__)}"
+      File.Only.Logger.Proxy.mod(__MODULE__)
     end
   end
 
   @doc ~S'''
-  Returns a heredoc to trace the logged message back to its source using the given [environment](`Macro.Env`).
+  Returns a heredoc to trace the logged message back to its source using the
+  given `env` (`Macro.Env`).
 
   ## Examples
 
@@ -224,13 +235,13 @@ defmodule File.Only.Logger do
   '''
   defmacro from(env) do
     quote do
-      """
-      • App: #{app()}
-      • Library: #{lib()}
-      • Module: #{mod()}
-      • Function: #{fun(unquote(env))}
-      """
-      |> String.trim_trailing()
+      File.Only.Logger.Proxy.from(unquote(env))
+    end
+  end
+
+  defmacro from(env, module) do
+    quote do
+      File.Only.Logger.Proxy.from(unquote(env), unquote(module))
     end
   end
 end

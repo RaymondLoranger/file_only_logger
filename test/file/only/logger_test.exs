@@ -53,7 +53,7 @@ defmodule File.Only.LoggerTest.Log do
     \nNote that #{player.name}...
     • Has joined game: #{inspect(game.name)}
     • Game state: #{inspect(game.state)}
-    #{from(env)}
+    #{from(env, __MODULE__)}
     """
   end
 
@@ -73,7 +73,7 @@ defmodule File.Only.LoggerTest.Log do
     \nNote that #{player.name}...
     • Has joined game: #{inspect(game.name)}
     • Game state: #{inspect(game.state)}
-    #{from(env)}
+    #{from(env, __MODULE__)}
     """
   end
 
@@ -89,9 +89,12 @@ end
 
 defmodule File.Only.LoggerTest do
   use ExUnit.Case, async: true
+  use PersistConfig
 
   alias File.Only.Logger
   alias File.Only.LoggerTest.Log
+
+  @test_wait get_env(:test_wait)
 
   doctest Logger
 
@@ -115,10 +118,10 @@ defmodule File.Only.LoggerTest do
     }
 
     # Clear each log file...
-    paths
-    |> Map.values()
-    |> Enum.reject(&is_nil/1)
-    |> Enum.each(&File.rm/1)
+    # paths
+    # |> Map.values()
+    # |> Enum.reject(&is_nil/1)
+    # |> Enum.each(&File.rm/1)
 
     %{games: games, paths: paths}
   end
@@ -126,7 +129,7 @@ defmodule File.Only.LoggerTest do
   describe "Log.notice/2" do
     test "logs a notice message", %{paths: paths} do
       Log.notice(:message, {:notice, :info})
-      Process.sleep(222)
+      Process.sleep(@test_wait)
 
       assert File.read!(paths.info) =~ """
              [info]\s\s
@@ -138,7 +141,7 @@ defmodule File.Only.LoggerTest do
   describe "Log.warning/2" do
     test "logs a warning message", %{paths: paths} do
       Log.warning(:message, {:warning, :warn})
-      Process.sleep(222)
+      Process.sleep(@test_wait)
 
       assert File.read!(paths.warn) =~ """
              [warn]\s\s
@@ -150,7 +153,7 @@ defmodule File.Only.LoggerTest do
   describe "Log.critical/2" do
     test "logs a critical message", %{paths: paths} do
       Log.critical(:message, {:critical, :error})
-      Process.sleep(222)
+      Process.sleep(@test_wait)
 
       assert File.read!(paths.error) =~ """
              [error]\s
@@ -160,9 +163,9 @@ defmodule File.Only.LoggerTest do
   end
 
   describe "Log.alert/2" do
-    test "logs a alert message", %{paths: paths} do
+    test "logs an alert message", %{paths: paths} do
       Log.alert(:message, {:alert, :error})
-      Process.sleep(222)
+      Process.sleep(@test_wait)
 
       assert File.read!(paths.error) =~ """
              [error]\s
@@ -172,9 +175,9 @@ defmodule File.Only.LoggerTest do
   end
 
   describe "Log.emergency/2" do
-    test "logs a emergency message", %{paths: paths} do
+    test "logs an emergency message", %{paths: paths} do
       Log.emergency(:message, {:emergency, :error})
-      Process.sleep(222)
+      Process.sleep(@test_wait)
 
       assert File.read!(paths.error) =~ """
              [error]\s
@@ -186,7 +189,7 @@ defmodule File.Only.LoggerTest do
   describe "Log.warn/2" do
     test "logs a warning message", %{games: games, paths: paths} do
       Log.warn(:low_points, {games.anthony.player})
-      Process.sleep(222)
+      Process.sleep(@test_wait)
 
       assert File.read!(paths.warn) =~ """
              [warn]\s\s
@@ -197,51 +200,56 @@ defmodule File.Only.LoggerTest do
   end
 
   describe "Log.info/2" do
-    test "logs an info message", %{games: games, paths: paths} do
+    test "logs an i-n-f-o m-e-s-s-a-g-e", %{games: games, paths: paths} do
       Log.info(:joined_game, {games.stephan.player, games.stephan, __ENV__})
-      Process.sleep(222)
+      Process.sleep(@test_wait)
 
-      assert File.read!(paths.info) =~ """
-             [info]\s\s
-             Note that Stephan...
-             • Has joined game: STEPHAN
-             • Game state: :starting
-             • App: undefined
-             • Library: file_only_logger
-             • Module: File.Only.LoggerTest.Log
-             • Function: File.Only.LoggerTest.'test Log.info/2 logs an info message'/1
-             """
+      heredoc = """
+      [info]\s\s
+      Note that Stephan...
+      • Has joined game: STEPHAN
+      • Game state: :starting
+      • App: file_only_logger
+      • Library: file_only_logger
+      • Module: File.Only.LoggerTest.Log
+      • Function:\s
+        File.Only.LoggerTest.'test Log.info/2 logs an i-n-f-o m-e-s-s-a-g-e'/1
+      """
+
+      assert File.read!(paths.info) =~ heredoc
     end
 
     test "logs other info message", %{games: games, paths: paths} do
       Log.info(:joined_game_also, {games.raymond.player, games.raymond})
-      Process.sleep(222)
+      Process.sleep(@test_wait)
 
       assert File.read!(paths.info) =~ """
              [info]\s\s
              Note that Raymond...
              • Has joined game: RAYMOND
              • Game state: :stopping
-             • App: undefined
+             • App: file_only_logger
              • Library: file_only_logger
              • Module: File.Only.LoggerTest.Log
              """
     end
 
-    test "logs similar info message", %{games: games, paths: paths} do
+    test "logs similar info msg", %{games: games, paths: paths} do
       Log.info(:joined_game_too, {games.anthony.player, games.anthony, __ENV__})
-      Process.sleep(222)
+      Process.sleep(@test_wait)
 
-      assert File.read!(paths.info) =~ """
-             [info]\s\s
-             Note that Anthony...
-             • Has joined game: ANTHONY
-             • Game state: :on_going
-             • App: undefined
-             • Library: file_only_logger
-             • Module: File.Only.LoggerTest.Log
-             • Function: File.Only.LoggerTest.'test Log.info/2 logs similar info message'/1
-             """
+      heredoc = """
+      [info]\s\s
+      Note that Anthony...
+      • Has joined game: ANTHONY
+      • Game state: :on_going
+      • App: file_only_logger
+      • Library: file_only_logger
+      • Module: File.Only.LoggerTest.Log
+      • Function: File.Only.LoggerTest.'test Log.info/2 logs similar info msg'/1
+      """
+
+      assert File.read!(paths.info) =~ heredoc
     end
 
     test "logs extra info message", %{paths: paths} do
@@ -250,7 +258,7 @@ defmodule File.Only.LoggerTest do
       app = lib()
       all_env = Application.get_all_env(app)
       Log.info(:all_env, {app, all_env})
-      Process.sleep(222)
+      Process.sleep(@test_wait)
 
       assert File.read!(paths.info) =~ """
              [info]\s\s
