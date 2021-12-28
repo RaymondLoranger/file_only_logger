@@ -213,9 +213,9 @@ defmodule File.Only.Logger.Proxy do
 
   @spec log(Logger.level(), message, :lt | :eq | :gt) :: :ok
   defp log(level, message, compare) when compare in [:gt, :eq] do
-    removed = Try.remove_backend()
+    removed = Try.remove_console_backend()
     :ok = Logger.log(level, message)
-    if removed == :ok, do: Try.add_backend()
+    if removed == :ok, do: Try.add_console_backend()
     :ok
   end
 

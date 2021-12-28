@@ -15,42 +15,42 @@ defmodule File.Only.Logger.Proxy.Try do
   @doc """
   Removes the console backend. If it fails, will retry up to #{@times} times.
   """
-  @spec remove_backend :: :ok | {:error, atom}
-  def remove_backend do
+  @spec remove_console_backend :: :ok | {:error, atom}
+  def remove_console_backend do
     case Logger.remove_backend(:console, flush: @flush) do
       :ok ->
         :ok
 
       {:error, reason} ->
         :ok = Log.warn(:unremoved, {@wait, @times, reason, __ENV__})
-        remove_backend(@times)
+        remove_console_backend(@times)
     end
   end
 
   @doc """
   Adds the console backend. If it fails, will retry up to #{@times} times.
   """
-  @spec add_backend :: :ok | {:error, atom}
-  def add_backend do
+  @spec add_console_backend :: :ok | {:error, atom}
+  def add_console_backend do
     case Logger.add_backend(:console, flush: @flush) do
       {:ok, _pid} ->
         :ok
 
       {:error, reason} ->
         :ok = Log.warn(:unadded, {@wait, @times, reason, __ENV__})
-        add_backend(@times)
+        add_console_backend(@times)
     end
   end
 
   ## Private functions
 
-  @spec remove_backend(non_neg_integer) :: :ok | {:error, atom}
-  defp remove_backend(0) do
+  @spec remove_console_backend(non_neg_integer) :: :ok | {:error, atom}
+  defp remove_console_backend(0) do
     :ok = Log.warn(:remains_unremoved, {@wait, @times, __ENV__})
     {:error, :console_unremoved}
   end
 
-  defp remove_backend(times_left) do
+  defp remove_console_backend(times_left) do
     Process.sleep(@wait)
     times_left = times_left - 1
 
@@ -60,17 +60,17 @@ defmodule File.Only.Logger.Proxy.Try do
 
       {:error, reason} ->
         :ok = Log.warn(:still_unremoved, {@wait, times_left, reason, __ENV__})
-        remove_backend(times_left)
+        remove_console_backend(times_left)
     end
   end
 
-  @spec add_backend(non_neg_integer) :: :ok | {:error, atom}
-  defp add_backend(0) do
+  @spec add_console_backend(non_neg_integer) :: :ok | {:error, atom}
+  defp add_console_backend(0) do
     :ok = Log.warn(:remains_unadded, {@wait, @times, __ENV__})
     {:error, :console_unadded}
   end
 
-  defp add_backend(times_left) do
+  defp add_console_backend(times_left) do
     Process.sleep(@wait)
     times_left = times_left - 1
 
@@ -80,7 +80,7 @@ defmodule File.Only.Logger.Proxy.Try do
 
       {:error, reason} ->
         :ok = Log.warn(:still_unadded, {@wait, times_left, reason, __ENV__})
-        add_backend(times_left)
+        add_console_backend(times_left)
     end
   end
 end
