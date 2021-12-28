@@ -5,6 +5,7 @@ defmodule File.Only.Logger do
 
   use PersistConfig
 
+  @after_compile get_env(:after_compile)
   @levels get_env(:levels)
   @limit get_env(:limit)
 
@@ -77,7 +78,7 @@ defmodule File.Only.Logger do
       error :exit, {reason} do
         """
         \n'exit' caught...
-        • Reason: #{inspect(reason)}
+        Reason => #{inspect(reason)}
         """
       end
   '''
@@ -196,7 +197,7 @@ defmodule File.Only.Logger do
   end
 
   @doc ~S'''
-  Returns the current module name.
+  Returns the current module as a string.
 
   ## Examples
 
@@ -217,8 +218,7 @@ defmodule File.Only.Logger do
   end
 
   @doc ~S'''
-  Returns a heredoc to trace the logged message back to its source using the
-  given `env` (`Macro.Env`).
+  Returns a formatted heredoc to trace a message given `env` (`Macro.Env`).
 
   ## Examples
 
@@ -227,8 +227,7 @@ defmodule File.Only.Logger do
       error :exit, {reason, env} do
         """
         \n'exit' caught...
-        • Reason:
-          #{inspect(reason)}
+        • Reason: #{inspect(reason)}
         #{from(env)}
         """
       end
@@ -239,6 +238,22 @@ defmodule File.Only.Logger do
     end
   end
 
+  @doc ~S'''
+  Returns a formatted heredoc to trace a message given `env` (`Macro.Env`) and
+  `module`.
+
+  ## Examples
+
+      use File.Only.Logger
+
+      error :exit, {reason, env} do
+        """
+        \n'exit' caught...
+        • Reason: #{inspect(reason)}
+        #{from(env, __MODULE__)}
+        """
+      end
+  '''
   defmacro from(env, module) do
     quote do
       File.Only.Logger.Proxy.from(unquote(env), unquote(module))

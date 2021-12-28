@@ -39,17 +39,19 @@ config :file_only_logger, level: :info
 defmodule Log do
   use File.Only.Logger
 
-  error :error_occurred, {reason} do
+  warn :error_occurred, {reason} do
     """
     \n'error' occurred...
-    • Reason: '#{:file.format_error(reason)}'
+    Reason => '#{:file.format_error(reason)}'
     """
   end
 end
 
 defmodule Check do
-  def log_error() do
-    Log.error(:error_occurred, {:enoent})
+  def log_warn() do
+    Log.warn(:error_occurred, {:enoent})
   end
 end
+
+Check.log_warn()
 ```

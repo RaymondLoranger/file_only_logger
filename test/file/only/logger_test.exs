@@ -117,7 +117,7 @@ defmodule File.Only.LoggerTest do
       error: Application.get_env(:logger, :error_log)[:path]
     }
 
-    # Clear each log file...
+    # Delete each log file...
     # paths
     # |> Map.values()
     # |> Enum.reject(&is_nil/1)
