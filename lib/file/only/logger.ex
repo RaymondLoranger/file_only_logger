@@ -5,6 +5,7 @@ defmodule File.Only.Logger do
 
   use PersistConfig
 
+  @after_compile get_env(:after_compile)
   @levels get_env(:levels)
   @limit get_env(:limit)
 
@@ -12,13 +13,13 @@ defmodule File.Only.Logger do
   Either aliases `File.Only.Logger` (this module) and requires the alias or
   imports `File.Only.Logger`. In the latter case, you could instead simply
   `import File.Only.Logger`.
-  
+
   ## Examples
-  
+
       use File.Only.Logger, alias: FileLogger
-  
+
       use File.Only.Logger
-  
+
       import File.Only.Logger
   """
   defmacro __using__(options) do
@@ -38,14 +39,14 @@ defmodule File.Only.Logger do
 
   @doc ~S'''
   Injects function `info/2` into the caller's module.
-  
+
   The function will execute the `do_block` and write its result to the
   configured info log file.
-  
+
   ## Examples
-  
+
       use File.Only.Logger
-  
+
       info :game_state, {player, game} do
         """
         \nNote that #{player.name}...
@@ -66,18 +67,18 @@ defmodule File.Only.Logger do
 
   @doc ~S'''
   Injects function `error/2` into the caller's module.
-  
+
   The function will execute the `do_block` and write its result to the
   configured error log file.
-  
+
   ## Examples
-  
+
       use File.Only.Logger
-  
+
       error :exit, {reason} do
         """
         \n'exit' caught...
-        • Reason: #{inspect(reason)}
+        Reason => #{inspect(reason)}
         """
       end
   '''
@@ -108,11 +109,11 @@ defmodule File.Only.Logger do
   @doc ~S'''
   Returns string "<module>.<function>/<arity>" e.g. "My.Math.sqrt/1" from the
   given `env` (`Macro.Env`).
-  
+
   ## Examples
-  
+
       use File.Only.Logger
-  
+
       error :exit, {reason, env} do
         """
         \n'exit' caught...
@@ -129,11 +130,11 @@ defmodule File.Only.Logger do
 
   @doc ~S'''
   May prefix `string` with "\n\s\s" if longer than `limit` - `offset`.
-  
+
   ## Examples
-  
+
       use File.Only.Logger
-  
+
       error :exit, {reason, env} do
         """
         \n'exit' caught...
@@ -152,14 +153,14 @@ defmodule File.Only.Logger do
 
   @doc ~S'''
   Returns the application for the current process or module.
-  
+
   Returns `:undefined` if the current process does not belong to any
   application or the current module is not listed in any application spec.
-  
+
   ## Examples
-  
+
       use File.Only.Logger
-  
+
       error :exit, {reason} do
         """
         \n'exit' caught...
@@ -176,11 +177,11 @@ defmodule File.Only.Logger do
 
   @doc ~S'''
   Returns the current library name.
-  
+
   ## Examples
-  
+
       use File.Only.Logger
-  
+
       error :exit, {reason} do
         """
         \n'exit' caught...
@@ -196,12 +197,12 @@ defmodule File.Only.Logger do
   end
 
   @doc ~S'''
-  Returns the current module name.
-  
+  Returns the current module as a string.
+
   ## Examples
-  
+
       use File.Only.Logger
-  
+
       error :exit, {reason} do
         """
         \n'exit' caught...
@@ -217,18 +218,16 @@ defmodule File.Only.Logger do
   end
 
   @doc ~S'''
-  Returns a heredoc to trace the logged message back to its source using the
-  given `env` (`Macro.Env`).
-  
+  Returns a formatted heredoc to trace a message given `env` (`Macro.Env`).
+
   ## Examples
-  
+
       use File.Only.Logger
-  
+
       error :exit, {reason, env} do
         """
         \n'exit' caught...
-        • Reason:
-          #{inspect(reason)}
+        • Reason: #{inspect(reason)}
         #{from(env)}
         """
       end
@@ -239,6 +238,22 @@ defmodule File.Only.Logger do
     end
   end
 
+  @doc ~S'''
+  Returns a formatted heredoc to trace a message given `env` (`Macro.Env`) and
+  `module`.
+
+  ## Examples
+
+      use File.Only.Logger
+
+      error :exit, {reason, env} do
+        """
+        \n'exit' caught...
+        • Reason: #{inspect(reason)}
+        #{from(env, __MODULE__)}
+        """
+      end
+  '''
   defmacro from(env, module) do
     quote do
       File.Only.Logger.Proxy.from(unquote(env), unquote(module))

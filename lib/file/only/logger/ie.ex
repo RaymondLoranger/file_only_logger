@@ -47,6 +47,7 @@ defmodule File.Only.Logger.IE do
       alias unquote(__MODULE__).Log
       alias File.Only.Logger.Log
       alias File.Only.Logger.Proxy
+      alias File.Only.Logger.Proxy.Try
       alias File.Only.Logger
 
       :ok
