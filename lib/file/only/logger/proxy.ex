@@ -21,17 +21,17 @@ defmodule File.Only.Logger.Proxy do
 
   @doc """
   Writes `message` to the configured log file of logging level `level`.
-  
+
   ## Examples
-  
+
       iex> alias File.Only.Logger.Proxy
       iex> Proxy.log(:info, "*** INFO message ***")
       :ok
-  
+
       iex> alias File.Only.Logger.Proxy
       iex> Proxy.log(:debug, fn -> "*** DEBUG message ***" end)
       :ok
-  
+
       iex> alias File.Only.Logger.Proxy
       iex> Proxy.log(:critical, %{critical: :message})
       :ok
@@ -43,9 +43,9 @@ defmodule File.Only.Logger.Proxy do
   @doc """
   Returns string "<module>.<function>/<arity>" e.g. "My.Math.sqrt/1" from the
   given `env` (`Macro.Env`).
-  
+
   ## Examples
-  
+
       iex> defmodule My.Math do
       ...>   alias File.Only.Logger.Proxy
       ...>   def sqrt(_number) do
@@ -66,9 +66,9 @@ defmodule File.Only.Logger.Proxy do
 
   @doc ~S'''
   May prefix `string` with "\n\s\s" if longer than `limit` - `offset`.
-  
+
   ## Examples
-  
+
       iex> alias File.Only.Logger.Proxy
       iex> supercal = "supercalifragilisticexpialidocious"
       iex> heredoc = """
@@ -76,7 +76,7 @@ defmodule File.Only.Logger.Proxy do
       ...> """
       iex> Proxy.maybe_break(heredoc, 9)
       "Feeling: supercalifragilisticexpialidocious\n"
-  
+
       iex> alias File.Only.Logger.Proxy
       iex> supercal = "supercalifragilisticexpialidocious"
       iex> heredoc = """
@@ -93,12 +93,12 @@ defmodule File.Only.Logger.Proxy do
 
   @doc """
   Returns the application for the current process or module.
-  
+
   Returns `:undefined` if the current process does not belong to any
   application or the current module is not listed in any application spec.
-  
+
   ## Examples
-  
+
       iex> alias File.Only.Logger.Proxy
       iex> Proxy.app
       :file_only_logger
@@ -113,9 +113,9 @@ defmodule File.Only.Logger.Proxy do
 
   @doc """
   Returns the current library name.
-  
+
   ## Examples
-  
+
       iex> alias File.Only.Logger.Proxy
       iex> Proxy.lib
       :file_only_logger
@@ -125,13 +125,13 @@ defmodule File.Only.Logger.Proxy do
 
   @doc """
   Returns the given `module` as a string.
-  
+
   ## Examples
-  
+
       iex> alias File.Only.Logger.Proxy
       iex> Proxy.mod(__MODULE__)
       "File.Only.Logger.ProxyTest"
-  
+
       iex> alias File.Only.Logger.Proxy
       iex> Proxy.mod(Elixir.Date.Range)
       "Date.Range"
@@ -141,9 +141,9 @@ defmodule File.Only.Logger.Proxy do
 
   @doc ~S'''
   Returns a formatted heredoc to trace a message given `env` (`Macro.Env`).
-  
+
   ## Examples
-  
+
       iex> alias File.Only.Logger.Proxy
       iex> heredoc = """
       ...> • App: file_only_logger
@@ -168,9 +168,9 @@ defmodule File.Only.Logger.Proxy do
   @doc ~S'''
   Returns a formatted heredoc to trace a message given `env` (`Macro.Env`) and
   `module`.
-  
+
   ## Examples
-  
+
       iex> alias File.Only.Logger.Proxy
       iex> heredoc = """
       ...> • App: file_only_logger
