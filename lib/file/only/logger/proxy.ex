@@ -14,6 +14,9 @@ defmodule File.Only.Logger.Proxy do
   @lib Mix.Project.config()[:app]
   @limit get_env(:limit)
 
+  @typedoc "Message to be logged"
+  @type message :: String.t() | iodata | fun | keyword | map
+
   @doc """
   Returns `true` if `value` is a positive integer, otherwise `false`.
   """
@@ -25,18 +28,26 @@ defmodule File.Only.Logger.Proxy do
   ## Examples
 
       iex> alias File.Only.Logger.Proxy
-      iex> Proxy.log(:info, "*** INFO message ***")
+      iex> Proxy.log(:debug, "*** String message ***")
       :ok
 
       iex> alias File.Only.Logger.Proxy
-      iex> Proxy.log(:debug, fn -> "*** DEBUG message ***" end)
+      iex> Proxy.log(:debug, ['*** Improper', 'List' | 'Message ***'])
       :ok
 
       iex> alias File.Only.Logger.Proxy
-      iex> Proxy.log(:critical, %{critical: :message})
+      iex> Proxy.log(:debug, fn -> "*** Function message ***" end)
+      :ok
+
+      iex> alias File.Only.Logger.Proxy
+      iex> Proxy.log(:debug, %{'first' => 'Map', 'last' => 'Message'})
+      :ok
+
+      iex> alias File.Only.Logger.Proxy
+      iex> Proxy.log(:debug, first: 'Keyword', last: 'Message')
       :ok
   """
-  @spec log(Logger.level(), String.t()) :: :ok
+  @spec log(Logger.level(), message) :: :ok
   def log(level, message) when level in @levels,
     do: log(level, message, Logger.compare_levels(level, level()))
 
@@ -200,7 +211,7 @@ defmodule File.Only.Logger.Proxy do
   @spec level :: Logger.level() | :all | :none
   defp level, do: get_env(:level, :all)
 
-  @spec log(Logger.level(), String.t(), :lt | :eq | :gt) :: :ok
+  @spec log(Logger.level(), message, :lt | :eq | :gt) :: :ok
   defp log(level, message, compare) when compare in [:gt, :eq] do
     removed = Try.remove_backend()
     :ok = Logger.log(level, message)
