@@ -14,17 +14,17 @@ defmodule File.Only.Logger.Proxy do
 
   @doc """
   Writes `message` to the configured log file of logging level `level`.
-
+  
   ## Examples
-
+  
       iex> alias File.Only.Logger.Proxy
       iex> Proxy.log(:info, "*** INFO message ***")
       :ok
-
+  
       iex> alias File.Only.Logger.Proxy
       iex> Proxy.log(:debug, fn -> "*** DEBUG message ***" end)
       :ok
-
+  
       iex> alias File.Only.Logger.Proxy
       iex> Proxy.log(:critical, %{critical: :message})
       :ok
