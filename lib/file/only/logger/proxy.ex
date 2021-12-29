@@ -86,6 +86,20 @@ defmodule File.Only.Logger.Proxy do
   config :file_only_logger, line_length: 80
   ```
 
+  ```elixir
+  import Config
+
+  line_length =
+    try do
+      {keyword, _binding} = Code.eval_file(".formatter.exs")
+      keyword[:line_length] || 98
+    rescue
+      _error -> 80
+    end
+
+  config :file_only_logger, line_length: line_length
+  ```
+
   ## Examples
 
       iex> alias File.Only.Logger.Proxy
