@@ -7,7 +7,7 @@ defmodule File.Only.Logger do
 
   @after_compile get_env(:after_compile)
   @levels get_env(:levels)
-  @limit get_env(:limit)
+  @line_length get_env(:line_length, 80)
 
   @doc """
   Either aliases `File.Only.Logger` (this module) and requires the alias or
@@ -129,7 +129,15 @@ defmodule File.Only.Logger do
   end
 
   @doc ~S'''
-  May prefix `string` with "\n\s\s" if longer than `limit` - `offset`.
+  Will prefix `string` with "\n\s\s" if longer than `line_length` - `offset`.
+  
+  You may use file `config/config.exs` or friends to configure `line_length`:
+  
+  ```elixir
+  import Config
+  
+  config :file_only_logger, line_length: 80
+  ```
   
   ## Examples
   
@@ -143,10 +151,10 @@ defmodule File.Only.Logger do
         """
       end
   '''
-  defmacro maybe_break(string, offset, limit \\ @limit) do
+  defmacro maybe_break(string, offset, line_length \\ @line_length) do
     string = Macro.expand(string, __CALLER__)
 
-    quote bind_quoted: [string: string, offset: offset, limit: limit] do
+    quote bind_quoted: [string: string, offset: offset, limit: line_length] do
       File.Only.Logger.Proxy.maybe_break(string, offset, limit)
     end
   end

@@ -12,7 +12,7 @@ defmodule File.Only.Logger.Proxy do
   @after_compile get_env(:after_compile)
   @levels get_env(:levels)
   @lib Mix.Project.config()[:app]
-  @limit get_env(:limit)
+  @line_length get_env(:line_length, 80)
 
   @typedoc "Message to be logged"
   @type message :: String.t() | iodata | fun | keyword | map
@@ -20,7 +20,7 @@ defmodule File.Only.Logger.Proxy do
   @doc """
   Returns `true` if `value` is a positive integer, otherwise `false`.
   """
-  defguard is_pos_int(value) when is_integer(value) and value > 0
+  defguard is_pos_integer(value) when is_integer(value) and value > 0
 
   @doc """
   Writes `message` to the configured log file of logging level `level`.
@@ -76,7 +76,15 @@ defmodule File.Only.Logger.Proxy do
   def fun(%Macro.Env{function: nil}), do: "'not inside a function'"
 
   @doc ~S'''
-  May prefix `string` with "\n\s\s" if longer than `limit` - `offset`.
+  Will prefix `string` with "\n\s\s" if longer than `line_length` - `offset`.
+
+  You may use file `config/config.exs` or friends to configure `line_length`:
+
+  ```elixir
+  import Config
+
+  config :file_only_logger, line_length: 80
+  ```
 
   ## Examples
 
@@ -93,13 +101,16 @@ defmodule File.Only.Logger.Proxy do
       iex> heredoc = """
       ...> Feeling: #{supercal}ly #{supercal}
       ...> """
-      iex> Proxy.maybe_break(heredoc, 9) |> String.starts_with?("\n\s\sFeeling")
-      true
+      iex> Proxy.maybe_break(heredoc, 9) |> String.slice(0..57)
+      "\n\s\sFeeling: supercalifragilisticexpialidociously supercali"
   '''
   @spec maybe_break(String.t(), pos_integer, pos_integer) :: String.t()
-  def maybe_break(string, offset, limit \\ @limit)
-      when is_binary(string) and is_pos_int(offset) and is_pos_int(limit) do
-    if String.length(string) > limit - offset, do: "\n  #{string}", else: string
+  def maybe_break(string, offset, line_length \\ @line_length)
+      when is_binary(string) and is_pos_integer(offset) and
+             is_pos_integer(line_length) do
+    if String.length(string) > line_length - offset,
+      do: "\n  #{string}",
+      else: string
   end
 
   @doc """
