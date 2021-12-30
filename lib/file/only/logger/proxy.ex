@@ -58,11 +58,11 @@ defmodule File.Only.Logger.Proxy do
   ## Examples
 
       iex> defmodule My.Math do
-      ...>   alias File.Only.Logger.Proxy
-      ...>   def sqrt(_number) do
-      ...>     Proxy.fun(__ENV__)
-      ...>   end
-      ...> end
+      iex>   alias File.Only.Logger.Proxy
+      iex>   def sqrt(_number) do
+      iex>     Proxy.fun(__ENV__)
+      iex>   end
+      iex> end
       iex> My.Math.sqrt(9)
       "File.Only.Logger.ProxyTest.My.Math.sqrt/1"
   """
