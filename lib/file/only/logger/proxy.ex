@@ -51,15 +51,15 @@ defmodule File.Only.Logger.Proxy do
   def log(level, message) when level in @levels do
     # `Logger.compare_levels/2` works when comparing an actual level to
     # `:all` or `:none`. It also considers `:warn` and `:warning` equal.
-
-    # Logger.compare_levels(:emergency, :none) # => :lt
-    # Logger.compare_levels(:debug, :all) # => :gt
-    # Logger.compare_levels(:warn, :warning) # => :eq
-    # Logger.compare_levels(:warning, :warn) # => :eq
-    # Logger.compare_levels(:error, :warn) # => :gt
-    # Logger.compare_levels(:error, :warning) # => :gt
-    # Logger.compare_levels(:notice, :warning) # => :lt
-    # Logger.compare_levels(:notice, :warn) # => :lt
+    #
+    #  Logger.compare_levels(:emergency, :none) # => :lt
+    #  Logger.compare_levels(:debug, :all) # => :gt
+    #  Logger.compare_levels(:warn, :warning) # => :eq
+    #  Logger.compare_levels(:warning, :warn) # => :eq
+    #  Logger.compare_levels(:error, :warn) # => :gt
+    #  Logger.compare_levels(:error, :warning) # => :gt
+    #  Logger.compare_levels(:notice, :warning) # => :lt
+    #  Logger.compare_levels(:notice, :warn) # => :lt
     compare = Logger.compare_levels(level, level())
     log(level, message, compare)
   end
