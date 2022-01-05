@@ -48,8 +48,10 @@ defmodule File.Only.Logger.Proxy do
       :ok
   """
   @spec log(Logger.level(), message) :: :ok
-  def log(level, message) when level in @levels,
-    do: log(level, message, Logger.compare_levels(level, level()))
+  def log(level, message) when level in @levels do
+    compare = compare_levels(level, level())
+    log(level, message, compare)
+  end
 
   @doc """
   Returns string "<module>.<function>/<arity>" e.g. "My.Math.sqrt/1" from the
@@ -233,8 +235,16 @@ defmodule File.Only.Logger.Proxy do
 
   ## Private functions
 
-  @spec level :: Logger.level() | :all | :none
+  # Runtime configuration log level
+  @typep level :: Logger.level() | :all | :none
+
+  @spec level :: level
   defp level, do: get_env(:level, :all)
+
+  @spec compare_levels(Logger.level(), level) :: :lt | :eq | :gt
+  defp compare_levels(_level, :all), do: :gt
+  defp compare_levels(_level, :none), do: :lt
+  defp compare_levels(level, runtime), do: Logger.compare_levels(level, runtime)
 
   @spec log(Logger.level(), message, :lt | :eq | :gt) :: :ok
   defp log(level, message, compare) when compare in [:gt, :eq] do
