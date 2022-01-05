@@ -49,7 +49,18 @@ defmodule File.Only.Logger.Proxy do
   """
   @spec log(Logger.level(), message) :: :ok
   def log(level, message) when level in @levels do
-    compare = compare_levels(level, level())
+    # `Logger.compare_levels/2` works when comparing an actual level to
+    # `:all` or `:none`. It also considers `:warn` and `:warning` equal.
+
+    # Logger.compare_levels(:emergency, :none) # => :lt
+    # Logger.compare_levels(:debug, :all) # => :gt
+    # Logger.compare_levels(:warn, :warning) # => :eq
+    # Logger.compare_levels(:warning, :warn) # => :eq
+    # Logger.compare_levels(:error, :warn) # => :gt
+    # Logger.compare_levels(:error, :warning) # => :gt
+    # Logger.compare_levels(:notice, :warning) # => :lt
+    # Logger.compare_levels(:notice, :warn) # => :lt
+    compare = Logger.compare_levels(level, level())
     log(level, message, compare)
   end
 
@@ -235,16 +246,8 @@ defmodule File.Only.Logger.Proxy do
 
   ## Private functions
 
-  # Runtime configuration log level
-  @typep level :: Logger.level() | :all | :none
-
-  @spec level :: level
+  @spec level :: Logger.level() | :all | :none
   defp level, do: get_env(:level, :all)
-
-  @spec compare_levels(Logger.level(), level) :: :lt | :eq | :gt
-  defp compare_levels(_level, :all), do: :gt
-  defp compare_levels(_level, :none), do: :lt
-  defp compare_levels(level, runtime), do: Logger.compare_levels(level, runtime)
 
   @spec log(Logger.level(), message, :lt | :eq | :gt) :: :ok
   defp log(level, message, compare) when compare in [:gt, :eq] do
