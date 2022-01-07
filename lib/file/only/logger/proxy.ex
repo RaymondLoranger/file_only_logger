@@ -249,6 +249,7 @@ defmodule File.Only.Logger.Proxy do
   @spec level :: Logger.level() | :all | :none
   defp level, do: get_env(:level, :all)
 
+  @dialyzer :no_match
   @spec log(Logger.level(), message, :lt | :eq | :gt) :: :ok
   defp log(level, message, compare) when compare in [:gt, :eq] do
     removed = Try.remove_console_backend()

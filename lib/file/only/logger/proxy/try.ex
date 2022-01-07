@@ -15,12 +15,17 @@ defmodule File.Only.Logger.Proxy.Try do
   @doc """
   Removes the console backend. If it fails, will retry up to #{@times} times.
   """
+  @dialyzer {:no_match, remove_console_backend: 0}
   @spec remove_console_backend :: :ok | {:error, atom}
   def remove_console_backend do
     case Logger.remove_backend(:console, flush: @flush) do
       :ok ->
         :ok
 
+      {:error, :not_found} ->
+        :ok
+
+      # Can never match per Dialyzer. But just in case...
       {:error, reason} ->
         :ok = Log.warn(:unremoved, {@wait, @times, reason, __ENV__})
         remove_console_backend(@times)
@@ -36,6 +41,9 @@ defmodule File.Only.Logger.Proxy.Try do
       {:ok, _pid} ->
         :ok
 
+      {:error, :already_present} ->
+        :ok
+
       {:error, reason} ->
         :ok = Log.warn(:unadded, {@wait, @times, reason, __ENV__})
         add_console_backend(@times)
@@ -44,6 +52,7 @@ defmodule File.Only.Logger.Proxy.Try do
 
   ## Private functions
 
+  @dialyzer {:no_unused, remove_console_backend: 1}
   @spec remove_console_backend(non_neg_integer) :: :ok | {:error, atom}
   defp remove_console_backend(0) do
     :ok = Log.warn(:remains_unremoved, {@wait, @times, __ENV__})
