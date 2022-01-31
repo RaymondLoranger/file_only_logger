@@ -3,8 +3,6 @@ defmodule File.Only.Logger.Log do
 
   require Logger
 
-  @after_compile get_env(:after_compile)
-
   @spec warn(atom, tuple) :: :ok
   def warn(:unremoved, {wait, times, reason, env}) do
     Logger.warn("""

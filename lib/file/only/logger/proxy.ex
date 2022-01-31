@@ -9,7 +9,6 @@ defmodule File.Only.Logger.Proxy do
 
   alias __MODULE__.Try
 
-  @after_compile get_env(:after_compile)
   @levels get_env(:levels)
   @lib Mix.Project.config()[:app]
   @line_length get_env(:line_length, 80)

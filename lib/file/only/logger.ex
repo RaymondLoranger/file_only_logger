@@ -5,7 +5,6 @@ defmodule File.Only.Logger do
 
   use PersistConfig
 
-  @after_compile get_env(:after_compile)
   @levels get_env(:levels)
   @line_length get_env(:line_length, 80)
 

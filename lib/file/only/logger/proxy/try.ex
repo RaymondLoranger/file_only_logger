@@ -7,7 +7,6 @@ defmodule File.Only.Logger.Proxy.Try do
 
   alias File.Only.Logger.Log
 
-  @after_compile get_env(:after_compile)
   @flush true
   @times 7
   @wait 10
