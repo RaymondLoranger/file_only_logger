@@ -90,7 +90,12 @@ defmodule File.Only.Logger.Proxy do
 
   @doc ~S'''
   Will prefix `string` with "\n<padding>" if `string` is longer
-  than <line_length> - `offset` where <padding> and <line_length> are respectively the `:padding` and `:line_length` options.
+  than <line_length> - `offset` where <padding> and <line_length> are
+  respectively the `:padding` and `:line_length` options.
+
+  Types `binary()` rather than `String.t()` are specified to keep Dialyzer happy
+  in case `string` is the result of a function call returning a binary like
+  `Path.expand/1` for example.
 
   ## Options
 
@@ -132,8 +137,7 @@ defmodule File.Only.Logger.Proxy do
          "Today I'm feeling astonishingly supercalifragilisticexpialidocious..."
       """
   '''
-
-  @spec maybe_break(String.t(), pos_integer, keyword) :: String.t()
+  @spec maybe_break(binary, pos_integer, keyword) :: binary
   def maybe_break(string, offset, options \\ [])
       when is_binary(string) and is_pos_integer(offset) and is_list(options) do
     line_length =
