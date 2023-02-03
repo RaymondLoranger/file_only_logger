@@ -89,8 +89,8 @@ defmodule File.Only.Logger.Proxy do
   def fun(%Macro.Env{function: nil}), do: "'not inside a function'"
 
   @doc ~S'''
-  Will prefix `string` with "\n<padding>" if `string` is longer
-  than <line_length> - `offset` where <padding> and <line_length> are
+  Will prefix `string` with "\n<padding>" if `string` is longer than
+  `<line_length>` - `offset` where `<padding>` and `<line_length>` are
   respectively the `:padding` and `:line_length` options.
 
   Types `binary()` rather than `String.t()` are specified to keep Dialyzer happy

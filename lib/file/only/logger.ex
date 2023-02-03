@@ -127,8 +127,9 @@ defmodule File.Only.Logger do
   end
 
   @doc ~S'''
-  Will prefix `string` with "\n<padding>" if `string` is longer
-  than <line_length> - `offset` where <padding> and <line_length> are respectively the `:padding` and `:line_length` options.
+  Will prefix `string` with "\n<padding>" if `string` is longer than
+  `<line_length>` - `offset` where `<padding>` and `<line_length>` are
+  respectively the `:padding` and `:line_length` options.
 
   ## Options
 
