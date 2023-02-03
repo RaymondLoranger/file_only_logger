@@ -6,7 +6,6 @@ defmodule File.Only.Logger do
   use PersistConfig
 
   @levels get_env(:levels)
-  @line_length get_env(:line_length, 80)
 
   @doc """
   Either aliases `File.Only.Logger` (this module) and requires the alias or
@@ -128,29 +127,15 @@ defmodule File.Only.Logger do
   end
 
   @doc ~S'''
-  Will prefix `string` with "\n\s\s" if longer than `line_length` - `offset`.
+  Will prefix `string` with "\n<padding>" if `string` is longer
+  than <line_length> - `offset` where <padding> and <line_length> are respectively the `:padding` and `:line_length` options.
 
-  You may use file `config/config.exs` or friends to configure `line_length`:
+  ## Options
 
-  ```elixir
-  import Config
-
-  config :file_only_logger, line_length: 80
-  ```
-
-  ```elixir
-  import Config
-
-  line_length =
-    try do
-      {keyword, _binding} = Code.eval_file(".formatter.exs")
-      keyword[:line_length] || 98
-    rescue
-      _error -> 80
-    end
-
-  config :file_only_logger, line_length: line_length
-  ```
+    * `:line_length` (positive integer) - the preferred line length of messages
+      sent to the log files. Defaults to 80.
+    * `:padding` (string) - Filler inserted after the line break. Defaults to
+      "\s\s".
 
   ## Examples
 
@@ -164,11 +149,11 @@ defmodule File.Only.Logger do
         """
       end
   '''
-  defmacro maybe_break(string, offset, line_length \\ @line_length) do
+  defmacro maybe_break(string, offset, options \\ []) do
     string = Macro.expand(string, __CALLER__)
 
-    quote bind_quoted: [string: string, offset: offset, limit: line_length] do
-      File.Only.Logger.Proxy.maybe_break(string, offset, limit)
+    quote bind_quoted: [string: string, offset: offset, options: options] do
+      File.Only.Logger.Proxy.maybe_break(string, offset, options)
     end
   end
 

@@ -11,7 +11,8 @@ defmodule File.Only.Logger.Proxy do
 
   @levels get_env(:levels)
   @lib Mix.Project.config()[:app]
-  @line_length get_env(:line_length, 80)
+  @line_length get_env(:line_length)
+  @padding get_env(:padding)
 
   @typedoc "Message to be logged"
   @type message :: String.t() | iodata | fun | keyword | map
@@ -31,7 +32,7 @@ defmodule File.Only.Logger.Proxy do
       :ok
 
       iex> alias File.Only.Logger.Proxy
-      iex> Proxy.log(:debug, ['*** Improper', 'List' | 'Message ***'])
+      iex> Proxy.log(:debug, ['*** Improper ', 'List ' | 'Message ***'])
       :ok
 
       iex> alias File.Only.Logger.Proxy
@@ -88,54 +89,67 @@ defmodule File.Only.Logger.Proxy do
   def fun(%Macro.Env{function: nil}), do: "'not inside a function'"
 
   @doc ~S'''
-  Will prefix `string` with "\n\s\s" if longer than `line_length` - `offset`.
+  Will prefix `string` with "\n<padding>" if `string` is longer
+  than <line_length> - `offset` where <padding> and <line_length> are respectively the `:padding` and `:line_length` options.
 
-  You may use file `config/config.exs` or friends to configure `line_length`:
+  ## Options
 
-  ```elixir
-  import Config
-
-  config :file_only_logger, line_length: 80
-  ```
-
-  ```elixir
-  import Config
-
-  line_length =
-    try do
-      {keyword, _binding} = Code.eval_file(".formatter.exs")
-      keyword[:line_length] || 98
-    rescue
-      _error -> 80
-    end
-
-  config :file_only_logger, line_length: line_length
-  ```
+    * `:line_length` (positive integer) - the preferred line length of messages
+      sent to the log files. Defaults to 80.
+    * `:padding` (string) - Filler inserted after the line break. Defaults to
+      "\s\s".
 
   ## Examples
 
       iex> alias File.Only.Logger.Proxy
-      iex> supercal = "supercalifragilisticexpialidocious"
-      iex> heredoc = """
-      ...> Feeling: #{supercal}
+      iex> supercal = 'supercalifragilisticexpialidocious'
+      iex> """
+      ...> • Feeling: #{inspect(supercal) |> Proxy.maybe_break(11)}
       ...> """
-      iex> Proxy.maybe_break(heredoc, 9)
-      "Feeling: supercalifragilisticexpialidocious\n"
+      """
+      • Feeling: 'supercalifragilisticexpialidocious'
+      """
 
       iex> alias File.Only.Logger.Proxy
       iex> supercal = "supercalifragilisticexpialidocious"
-      iex> heredoc = """
-      ...> Feeling: #{supercal}ly #{supercal}
+      iex> supercal! = "#{supercal}ly #{supercal}!"
+      iex> """
+      ...> • Feeling: #{String.capitalize(supercal!) |> Proxy.maybe_break(11)}
       ...> """
-      iex> Proxy.maybe_break(heredoc, 9) |> String.slice(0..57)
-      "\n\s\sFeeling: supercalifragilisticexpialidociously supercali"
+      """
+      • Feeling:\s
+        Supercalifragilisticexpialidociously supercalifragilisticexpialidocious!
+      """
+
+      iex> import File.Only.Logger.Proxy, only: [maybe_break: 3]
+      iex> supercal = 'supercalifragilisticexpialidocious'
+      iex> msg = "Today I'm feeling astonishingly #{supercal}..."
+      iex> """
+      ...> -- Message: #{inspect(msg) |> maybe_break(12, padding: "\s\s\s")}
+      ...> """
+      """
+      -- Message:\s
+         "Today I'm feeling astonishingly supercalifragilisticexpialidocious..."
+      """
   '''
-  @spec maybe_break(String.t(), pos_integer, pos_integer) :: String.t()
-  def maybe_break(string, offset, line_length \\ @line_length)
-      when is_binary(string) and is_pos_integer(offset) and
-             is_pos_integer(line_length) do
+
+  @spec maybe_break(String.t(), pos_integer, keyword) :: String.t()
+  def maybe_break(string, offset, options \\ [])
+      when is_binary(string) and is_pos_integer(offset) and is_list(options) do
+    line_length =
+      case options[:line_length] do
+        length when is_pos_integer(length) -> length
+        _other -> @line_length
+      end
+
+    padding =
+      case options[:padding] do
+        filler when is_binary(filler) -> filler
+        _other -> @padding
+      end
+
     if String.length(string) > line_length - offset,
-      do: "\n  #{string}",
+      do: "\n#{padding}#{string}",
       else: string
   end
 
