@@ -93,10 +93,6 @@ defmodule File.Only.Logger.Proxy do
   `<line_length>` - `offset` where `<padding>` and `<line_length>` are
   respectively the `:padding` and `:line_length` options.
 
-  Types `binary()` rather than `String.t()` are specified to keep Dialyzer happy
-  in case `string` is the result of a function call returning a binary like
-  `Path.expand/1` for example.
-
   ## Options
 
     * `:line_length` (positive integer) - the preferred line length of messages
