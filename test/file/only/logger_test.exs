@@ -85,6 +85,14 @@ defmodule File.Only.LoggerTest.Log do
       #{inspect(all_env)}
     """
   end
+
+  info :binary_break, {env} do
+    """
+    \nChecking line break with binary arg:
+    • Relative path: #{Path.relative_to_cwd(env.file) |> maybe_break(17)}
+    • Absolute path: #{Path.expand(env.file) |> maybe_break(17)}
+    """
+  end
 end
 
 defmodule File.Only.LoggerTest do
@@ -265,6 +273,18 @@ defmodule File.Only.LoggerTest do
              Application environment:
              • For app: file_only_logger
              • Key-value pairs:
+             """
+    end
+
+    test "logs info message for line break with binary arg", %{paths: paths} do
+      Log.info(:binary_break, {__ENV__})
+      Process.sleep(@test_wait)
+
+      assert File.read!(paths.info) =~ """
+             [info]\s\s
+             Checking line break with binary arg:
+             • Relative path: test/file/only/logger_test.exs
+             • Absolute path:\s
              """
     end
   end
