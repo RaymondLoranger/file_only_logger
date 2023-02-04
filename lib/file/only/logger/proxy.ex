@@ -137,7 +137,7 @@ defmodule File.Only.Logger.Proxy do
          "Today I'm feeling astonishingly supercalifragilisticexpialidocious..."
       """
   '''
-  @spec maybe_break(binary, pos_integer, keyword) :: binary
+  @spec maybe_break(String.t(), pos_integer, keyword) :: String.t()
   def maybe_break(string, offset, options \\ [])
       when is_binary(string) and is_pos_integer(offset) and is_list(options) do
     line_length =
