@@ -20,6 +20,14 @@ defmodule File.Only.Logger.IE.Log do
     """
   end
 
+  warn :error_occurred, {reason, file} do
+    """
+    \n'error' occurred...
+    Reason => '#{:file.format_error(reason)}'
+    File => "#{Path.relative_to_cwd(file)}"
+    """
+  end
+
   ## Private functions
 
   defp via(name), do: {:via, Registry, {:registry, {Server, name}}}
@@ -35,6 +43,7 @@ defmodule File.Only.Logger.IE do
   #   use File.Only.Logger.IE
   #   log_error # And then check log files
   #   log_info # And then check log files
+  #   log_warn # And then check log files
 
   alias __MODULE__.Log
 
@@ -64,5 +73,10 @@ defmodule File.Only.Logger.IE do
     Log.info(:save, {%{name: "blue-moon", state: :exciting}, __ENV__})
     game = %{name: "supercalifragilisticexpialidocious", state: :extremely_good}
     Log.info(:save, {game, __ENV__})
+  end
+
+  @spec log_warn :: :ok
+  def log_warn do
+    Log.warn(:error_occurred, {:enoent, __ENV__.file})
   end
 end

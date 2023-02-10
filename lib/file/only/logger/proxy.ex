@@ -7,8 +7,6 @@ defmodule File.Only.Logger.Proxy do
 
   require Logger
 
-  alias __MODULE__.Try
-
   @levels get_env(:levels)
   @lib Mix.Project.config()[:app]
   @line_length get_env(:line_length)
@@ -49,19 +47,11 @@ defmodule File.Only.Logger.Proxy do
   """
   @spec log(Logger.level(), message) :: :ok
   def log(level, message) when level in @levels do
-    # `Logger.compare_levels/2` works when comparing an actual level to
-    # `:all` or `:none`. It also considers `:warn` and `:warning` equal.
-    #
-    #  Logger.compare_levels(:emergency, :none) # => :lt
-    #  Logger.compare_levels(:debug, :all) # => :gt
-    #  Logger.compare_levels(:warn, :warning) # => :eq
-    #  Logger.compare_levels(:warning, :warn) # => :eq
-    #  Logger.compare_levels(:error, :warn) # => :gt
-    #  Logger.compare_levels(:error, :warning) # => :gt
-    #  Logger.compare_levels(:notice, :warning) # => :lt
-    #  Logger.compare_levels(:notice, :warn) # => :lt
-    compare = Logger.compare_levels(level, level())
-    log(level, message, compare)
+    Logger.configure(level: level())
+    Logger.configure_backend(:console, level: :none)
+    :ok = Logger.log(level, message)
+    Logger.configure_backend(:console, level: Logger.level())
+    :ok
   end
 
   @doc """
@@ -261,15 +251,4 @@ defmodule File.Only.Logger.Proxy do
 
   @spec level :: Logger.level() | :all | :none
   defp level, do: get_env(:level, :all)
-
-  @dialyzer :no_match
-  @spec log(Logger.level(), message, :lt | :eq | :gt) :: :ok
-  defp log(level, message, compare) when compare in [:gt, :eq] do
-    removed = Try.remove_console_backend()
-    :ok = Logger.log(level, message)
-    if removed == :ok, do: Try.add_console_backend()
-    :ok
-  end
-
-  defp log(_level, _message, _compare), do: :ok
 end
