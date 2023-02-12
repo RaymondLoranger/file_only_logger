@@ -140,7 +140,7 @@ defmodule File.Only.LoggerTest do
       Process.sleep(@test_wait)
 
       assert File.read!(paths.info) =~ """
-             [info]\s\s
+             [info]\s
              Actual 'notice' message reported as 'info'...
              """
     end
@@ -152,7 +152,7 @@ defmodule File.Only.LoggerTest do
       Process.sleep(@test_wait)
 
       assert File.read!(paths.warn) =~ """
-             [warn]\s\s
+             [warn]\s
              Actual 'warning' message reported as 'warn'...
              """
     end
@@ -200,7 +200,7 @@ defmodule File.Only.LoggerTest do
       Process.sleep(@test_wait)
 
       assert File.read!(paths.warn) =~ """
-             [warn]\s\s
+             [warn]\s
              Careful Anthony...
              • Points left: 43
              """
@@ -213,7 +213,7 @@ defmodule File.Only.LoggerTest do
       Process.sleep(@test_wait)
 
       heredoc = """
-      [info]\s\s
+      [info]\s
       Note that Stephan...
       • Has joined game: STEPHAN
       • Game state: :starting
@@ -232,7 +232,7 @@ defmodule File.Only.LoggerTest do
       Process.sleep(@test_wait)
 
       assert File.read!(paths.info) =~ """
-             [info]\s\s
+             [info]\s
              Note that Raymond...
              • Has joined game: RAYMOND
              • Game state: :stopping
@@ -247,7 +247,7 @@ defmodule File.Only.LoggerTest do
       Process.sleep(@test_wait)
 
       heredoc = """
-      [info]\s\s
+      [info]\s
       Note that Anthony...
       • Has joined game: ANTHONY
       • Game state: :on_going
@@ -269,7 +269,7 @@ defmodule File.Only.LoggerTest do
       Process.sleep(@test_wait)
 
       assert File.read!(paths.info) =~ """
-             [info]\s\s
+             [info]\s
              Application environment:
              • For app: file_only_logger
              • Key-value pairs:
@@ -281,7 +281,7 @@ defmodule File.Only.LoggerTest do
       Process.sleep(@test_wait)
 
       assert File.read!(paths.info) =~ """
-             [info]\s\s
+             [info]\s
              Checking line break with binary arg:
              • Relative path: test/file/only/logger_test.exs
              • Absolute path:\s
