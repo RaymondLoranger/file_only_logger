@@ -9,7 +9,7 @@ Add `file_only_logger` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:file_only_logger, "~> 0.1.0"}
+    {:file_only_logger, "~> 0.2.0"}
   ]
 end
 ```
