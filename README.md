@@ -1,6 +1,7 @@
 # File-Only Logger
 
 A simple logger that writes messages to log files only (not to the console).
+Elixir's Logger Backends were abandoned in favor of Erlang's Logger handlers.
 
 ## Installation
 
