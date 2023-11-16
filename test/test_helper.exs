@@ -1,4 +1,5 @@
-env = Application.get_env(:file_only_logger, :logger)
+app = Mix.Project.config()[:app]
+env = Application.get_env(app, :logger)
 
 # Delete log files before test...
 for {:handler, _handler_id, :logger_std_h, %{config: %{file: path}}} <- env,
