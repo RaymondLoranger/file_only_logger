@@ -1,5 +1,6 @@
 import Config
 
+# Log file paths...
 debug_path = ~c"./log/debug.log"
 info_path = ~c"./log/info.log"
 warning_path = ~c"./log/warning.log"
@@ -54,14 +55,15 @@ config app, :logger, [
 # Purges debug messages...
 # config :logger, compile_time_purge_matching: [[level_lower_than: :info]]
 
-# Keeps only error messages...
+# Keeps only error messages and above...
 # config :logger, compile_time_purge_matching: [[level_lower_than: :error]]
 
-# Logs only error messages...
+# Logs only error messages and above...
 # config :logger, level: :error
 
+# Limits message size (in bytes)...
 # truncate_default_in_bytes = 8 * 1024
-
+#
 # Logger.Formatter.new(
 #   truncate: truncate_default_in_bytes * 2,
 #   format: format,
