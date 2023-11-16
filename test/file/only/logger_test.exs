@@ -1,51 +1,33 @@
 defmodule File.Only.LoggerTest.Log do
   use File.Only.Logger
 
-  notice :message, {logged_as, reported_as} do
+  def message(logged_as, no_longer_as, env) do
     """
-    \nActual '#{logged_as}' message reported as '#{reported_as}'...
+    \nActual '#{logged_as}' message no longer reported as '#{no_longer_as}'...
     • Logged as: '#{logged_as}'
-    • Reported as: '#{reported_as}'
+    • No longer reported as: '#{no_longer_as}'
+    #{from(env, __MODULE__)}
     """
   end
 
-  warning :message, {logged_as, reported_as} do
-    """
-    \nActual '#{logged_as}' message reported as '#{reported_as}'...
-    • Logged as: '#{logged_as}'
-    • Reported as: '#{reported_as}'
-    """
+  notice :message, {logged_as, no_longer_as, env} do
+    message(logged_as, no_longer_as, env)
   end
 
-  critical :message, {logged_as, reported_as} do
-    """
-    \nActual '#{logged_as}' message reported as '#{reported_as}'...
-    • Logged as: '#{logged_as}'
-    • Reported as: '#{reported_as}'
-    """
+  warning :message, {logged_as, no_longer_as, env} do
+    message(logged_as, no_longer_as, env)
   end
 
-  alert :message, {logged_as, reported_as} do
-    """
-    \nActual '#{logged_as}' message reported as '#{reported_as}'...
-    • Logged as: '#{logged_as}'
-    • Reported as: '#{reported_as}'
-    """
+  critical :message, {logged_as, no_longer_as, env} do
+    message(logged_as, no_longer_as, env)
   end
 
-  emergency :message, {logged_as, reported_as} do
-    """
-    \nActual '#{logged_as}' message reported as '#{reported_as}'...
-    • Logged as: '#{logged_as}'
-    • Reported as: '#{reported_as}'
-    """
+  alert :message, {logged_as, no_longer_as, env} do
+    message(logged_as, no_longer_as, env)
   end
 
-  warn :low_points, {player} do
-    """
-    \nCareful #{player.name}...
-    • Points left: #{player.points}
-    """
+  emergency :message, {logged_as, no_longer_as, env} do
+    message(logged_as, no_longer_as, env)
   end
 
   info :joined_game, {player, game, env} do
@@ -65,15 +47,6 @@ defmodule File.Only.LoggerTest.Log do
     • App: #{app()}
     • Library: #{lib()}
     • Module: #{mod()}
-    """
-  end
-
-  info :joined_game_too, {player, game, env} do
-    """
-    \nNote that #{player.name}...
-    • Has joined game: #{inspect(game.name)}
-    • Game state: #{inspect(game.state)}
-    #{from(env, __MODULE__)}
     """
   end
 
@@ -118,91 +91,72 @@ defmodule File.Only.LoggerTest do
     games = %{anthony: anthony, stephan: stephan, raymond: raymond}
 
     # %{debug: "./log/debug.log", info: "./log/info.log", ...}
-    paths = %{
-      debug: Application.get_env(:logger, :debug_log)[:path],
-      info: Application.get_env(:logger, :info_log)[:path],
-      warn: Application.get_env(:logger, :warn_log)[:path],
-      error: Application.get_env(:logger, :error_log)[:path]
-    }
-
-    # Delete each log file...
-    # paths
-    # |> Map.values()
-    # |> Enum.reject(&is_nil/1)
-    # |> Enum.each(&File.rm/1)
+    paths =
+      for {:handler, _handler_id, :logger_std_h,
+           %{level: level, config: %{file: path}}} <-
+            Application.get_env(:file_only_logger, :logger),
+          into: %{},
+          do: {level, path}
 
     %{games: games, paths: paths}
   end
 
   describe "Log.notice/2" do
     test "logs a notice message", %{paths: paths} do
-      Log.notice(:message, {:notice, :info})
+      Log.notice(:message, {:notice, :info, __ENV__})
       Process.sleep(@test_wait)
 
       assert File.read!(paths.info) =~ """
-             [info]\s
-             Actual 'notice' message reported as 'info'...
+             [notice]\s
+             Actual 'notice' message no longer reported as 'info'...
              """
     end
   end
 
   describe "Log.warning/2" do
     test "logs a warning message", %{paths: paths} do
-      Log.warning(:message, {:warning, :warn})
+      Log.warning(:message, {:warning, :warn, __ENV__})
       Process.sleep(@test_wait)
 
-      assert File.read!(paths.warn) =~ """
-             [warn]\s
-             Actual 'warning' message reported as 'warn'...
+      assert File.read!(paths.warning) =~ """
+             [warning]\s
+             Actual 'warning' message no longer reported as 'warn'...
              """
     end
   end
 
   describe "Log.critical/2" do
     test "logs a critical message", %{paths: paths} do
-      Log.critical(:message, {:critical, :error})
+      Log.critical(:message, {:critical, :error, __ENV__})
       Process.sleep(@test_wait)
 
       assert File.read!(paths.error) =~ """
-             [error]\s
-             Actual 'critical' message reported as 'error'...
+             [critical]\s
+             Actual 'critical' message no longer reported as 'error'...
              """
     end
   end
 
   describe "Log.alert/2" do
     test "logs an alert message", %{paths: paths} do
-      Log.alert(:message, {:alert, :error})
+      Log.alert(:message, {:alert, :error, __ENV__})
       Process.sleep(@test_wait)
 
       assert File.read!(paths.error) =~ """
-             [error]\s
-             Actual 'alert' message reported as 'error'...
+             [alert]\s
+             Actual 'alert' message no longer reported as 'error'...
              """
     end
   end
 
   describe "Log.emergency/2" do
     test "logs an emergency message", %{paths: paths} do
-      Log.emergency(:message, {:emergency, :error})
+      Log.emergency(:message, {:emergency, :error, __ENV__})
       Process.sleep(@test_wait)
 
       assert File.read!(paths.error) =~ """
-             [error]\s
-             Actual 'emergency' message reported as 'error'...
-             """
-    end
-  end
-
-  describe "Log.warn/2" do
-    test "logs a warning message", %{games: games, paths: paths} do
-      Log.warn(:low_points, {games.anthony.player})
-      Process.sleep(@test_wait)
-
-      assert File.read!(paths.warn) =~ """
-             [warn]\s
-             Careful Anthony...
-             • Points left: 43
+             [emergency]\s
+             Actual 'emergency' message no longer reported as 'error'...
              """
     end
   end
@@ -227,23 +181,8 @@ defmodule File.Only.LoggerTest do
       assert File.read!(paths.info) =~ heredoc
     end
 
-    test "logs other info message", %{games: games, paths: paths} do
-      Log.info(:joined_game_also, {games.raymond.player, games.raymond})
-      Process.sleep(@test_wait)
-
-      assert File.read!(paths.info) =~ """
-             [info]\s
-             Note that Raymond...
-             • Has joined game: RAYMOND
-             • Game state: :stopping
-             • App: file_only_logger
-             • Library: file_only_logger
-             • Module: File.Only.LoggerTest.Log
-             """
-    end
-
     test "logs similar info msg", %{games: games, paths: paths} do
-      Log.info(:joined_game_too, {games.anthony.player, games.anthony, __ENV__})
+      Log.info(:joined_game, {games.anthony.player, games.anthony, __ENV__})
       Process.sleep(@test_wait)
 
       heredoc = """
@@ -258,6 +197,21 @@ defmodule File.Only.LoggerTest do
       """
 
       assert File.read!(paths.info) =~ heredoc
+    end
+
+    test "logs other info message", %{games: games, paths: paths} do
+      Log.info(:joined_game_also, {games.raymond.player, games.raymond})
+      Process.sleep(@test_wait)
+
+      assert File.read!(paths.info) =~ """
+             [info]\s
+             Note that Raymond...
+             • Has joined game: RAYMOND
+             • Game state: :stopping
+             • App: file_only_logger
+             • Library: file_only_logger
+             • Module: File.Only.LoggerTest.Log
+             """
     end
 
     test "logs extra info message", %{paths: paths} do

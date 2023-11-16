@@ -20,7 +20,7 @@ defmodule File.Only.Logger.IE.Log do
     """
   end
 
-  warn :error_occurred, {reason, file} do
+  warning :error_occurred, {reason, file} do
     """
     \n'error' occurred...
     Reason => '#{:file.format_error(reason)}'
@@ -43,7 +43,7 @@ defmodule File.Only.Logger.IE do
   #   use File.Only.Logger.IE
   #   log_error # And then check log files
   #   log_info # And then check log files
-  #   log_warn # And then check log files
+  #   log_warning # And then check log files
 
   alias __MODULE__.Log
 
@@ -54,9 +54,7 @@ defmodule File.Only.Logger.IE do
 
       alias unquote(__MODULE__)
       alias unquote(__MODULE__).Log
-      alias File.Only.Logger.Log
       alias File.Only.Logger.Proxy
-      alias File.Only.Logger.Proxy.Try
       alias File.Only.Logger
 
       :ok
@@ -75,8 +73,8 @@ defmodule File.Only.Logger.IE do
     Log.info(:save, {game, __ENV__})
   end
 
-  @spec log_warn :: :ok
-  def log_warn do
-    Log.warn(:error_occurred, {:enoent, __ENV__.file})
+  @spec log_warning :: :ok
+  def log_warning do
+    Log.warning(:error_occurred, {:enoent, __ENV__.file})
   end
 end

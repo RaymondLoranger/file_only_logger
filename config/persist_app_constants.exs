@@ -3,7 +3,6 @@ import Config
 config :file_only_logger, nonexistent_module: File.Only.Logger.DeleteLogFiles
 
 # Logging levels ordered by importance or severity...
-# However :warning and :warn have the same severity...
 config :file_only_logger,
   levels: [
     :emergency,
@@ -11,7 +10,6 @@ config :file_only_logger,
     :critical,
     :error,
     :warning,
-    :warn,
     :notice,
     :info,
     :debug

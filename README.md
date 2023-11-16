@@ -39,7 +39,7 @@ config :file_only_logger, level: :info
 defmodule Log do
   use File.Only.Logger
 
-  warn :error_occurred, {reason, file} do
+  warning :error_occurred, {reason, file} do
     """
     \n'error' occurred...
     Reason => '#{:file.format_error(reason)}'
@@ -49,14 +49,14 @@ defmodule Log do
 end
 
 defmodule Check do
-  def log_warn do
-    Log.warn(:error_occurred, {:enoent, __ENV__.file})
+  def log_warning do
+    Log.warning(:error_occurred, {:enoent, __ENV__.file})
   end
 end
 
-Check.log_warn() # => will log something like so in the configured log file(s):
+Check.log_warning() # will log these lines in the configured log file(s):
 
-2023-02-09 16:39:19.763 [warn]
+2023-11-15 19:05:19.763 [warning]
 'error' occurred...
 Reason => 'no such file or directory'
 File => "lib/file/only/logger/ie.ex"

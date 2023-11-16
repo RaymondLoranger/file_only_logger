@@ -47,10 +47,14 @@ defmodule File.Only.Logger.Proxy do
   """
   @spec log(Logger.level(), message) :: :ok
   def log(level, message) when level in @levels do
+    # Set log level to runtime config value (defaults to :all)...
     Logger.configure(level: level())
-    Logger.configure_backend(:console, level: :none)
+    # Prevent console messages...
+    :logger.set_handler_config(:default, :level, :none)
+    # Log message with given level...
     :ok = Logger.log(level, message)
-    Logger.configure_backend(:console, level: Logger.level())
+    # Allow console messages...
+    :logger.set_handler_config(:default, :level, Logger.level())
     :ok
   end
 
@@ -93,12 +97,12 @@ defmodule File.Only.Logger.Proxy do
   ## Examples
 
       iex> alias File.Only.Logger.Proxy
-      iex> supercal = 'supercalifragilisticexpialidocious'
+      iex> supercal = "supercalifragilisticexpialidocious"
       iex> """
       ...> • Feeling: #{inspect(supercal) |> Proxy.maybe_break(11)}
       ...> """
       """
-      • Feeling: 'supercalifragilisticexpialidocious'
+      • Feeling: "supercalifragilisticexpialidocious"
       """
 
       iex> alias File.Only.Logger.Proxy
@@ -113,7 +117,7 @@ defmodule File.Only.Logger.Proxy do
       """
 
       iex> import File.Only.Logger.Proxy, only: [maybe_break: 3]
-      iex> supercal = 'supercalifragilisticexpialidocious'
+      iex> supercal = ~c"supercalifragilisticexpialidocious"
       iex> msg = "Today I'm feeling astonishingly #{supercal}..."
       iex> """
       ...> -- Message: #{inspect(msg) |> maybe_break(12, padding: "\s\s\s")}

@@ -1,35 +1,55 @@
 import Config
 
+debug_path = ~c"./log/debug.log"
+info_path = ~c"./log/info.log"
+warning_path = ~c"./log/warning.log"
+error_path = ~c"./log/error.log"
+
 # Listed by ascending log level...
-config :logger, :console,
-  colors: [
-    debug: :light_cyan,
-    info: :light_green,
-    warn: :light_yellow,
-    error: :light_red
-  ]
+colors = [
+  debug: :light_cyan,
+  info: :light_green,
+  warning: :light_yellow,
+  error: :light_red
+]
 
+app = Mix.Project.config()[:app]
 format = "$date $time [$level] $message\n"
+formatter = Logger.Formatter.new(format: format, colors: [enabled: false])
+config = %{file: ??, file_check: 5000, max_no_bytes: 300_000, max_no_files: 5}
 
-debug_path = "./log/debug.log"
-info_path = "./log/info.log"
-warn_path = "./log/warn.log"
-error_path = "./log/error.log"
+config :logger, :default_handler, format: format, colors: colors
 
-config :logger, :console, format: format
-config :logger, :debug_log, format: format, path: debug_path, level: :debug
-config :logger, :info_log, format: format, path: info_path, level: :info
-config :logger, :warn_log, format: format, path: warn_path, level: :warn
-config :logger, :error_log, format: format, path: error_path, level: :error
-
-config :logger,
-  backends: [
-    :console,
-    {LoggerFileBackend, :debug_log},
-    {LoggerFileBackend, :info_log},
-    {LoggerFileBackend, :warn_log},
-    {LoggerFileBackend, :error_log}
-  ]
+config app, :logger, [
+  # debug messages and above
+  {:handler, :debug_handler, :logger_std_h,
+   %{
+     level: :debug,
+     config: %{config | file: debug_path},
+     formatter: formatter
+   }},
+  # info messages and above
+  {:handler, :info_handler, :logger_std_h,
+   %{
+     level: :info,
+     config: %{config | file: info_path},
+     formatter: formatter
+   }},
+  # warning messages and above
+  {:handler, :warning_handler, :logger_std_h,
+   %{
+     level: :warning,
+     config: %{config | file: warning_path},
+     formatter: formatter
+   }},
+  # error messages and above
+  {:handler, :error_handler, :logger_std_h,
+   %{
+     level: :error,
+     config: %{config | file: error_path},
+     formatter: formatter
+   }}
+]
 
 # Purges debug messages...
 # config :logger, compile_time_purge_matching: [[level_lower_than: :info]]
@@ -42,4 +62,8 @@ config :logger,
 
 # truncate_default_in_bytes = 8 * 1024
 
-# config :logger, truncate: truncate_default_in_bytes * 2
+# Logger.Formatter.new(
+#   truncate: truncate_default_in_bytes * 2,
+#   format: format,
+#   colors: [enabled: false]
+# )
