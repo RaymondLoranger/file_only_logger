@@ -104,7 +104,7 @@ defmodule File.Only.LoggerTest do
 
   describe "Log.notice/2" do
     test "logs a notice message", %{paths: paths} do
-      Logger.notice("Logging a notice message")
+      Logger.notice("Logging a notice message!")
       Log.notice(:message, {:notice, :info, __ENV__})
       Process.sleep(@test_wait)
 
@@ -117,7 +117,7 @@ defmodule File.Only.LoggerTest do
 
   describe "Log.warning/2" do
     test "logs a warning message", %{paths: paths} do
-      Logger.warning("Logging a warning message")
+      Logger.warning("Logging a warning message!")
       Log.warning(:message, {:warning, :warn, __ENV__})
       Process.sleep(@test_wait)
 
@@ -130,7 +130,7 @@ defmodule File.Only.LoggerTest do
 
   describe "Log.critical/2" do
     test "logs a critical message", %{paths: paths} do
-      Logger.critical("Logging a critical message")
+      Logger.critical("Logging a critical message!")
       Log.critical(:message, {:critical, :error, __ENV__})
       Process.sleep(@test_wait)
 
@@ -143,7 +143,7 @@ defmodule File.Only.LoggerTest do
 
   describe "Log.alert/2" do
     test "logs an alert message", %{paths: paths} do
-      Logger.alert("Logging an alert message")
+      Logger.alert("Logging an alert message!")
       Log.alert(:message, {:alert, :error, __ENV__})
       Process.sleep(@test_wait)
 
@@ -156,7 +156,7 @@ defmodule File.Only.LoggerTest do
 
   describe "Log.emergency/2" do
     test "logs an emergency message", %{paths: paths} do
-      Logger.emergency("Logging an emergency message")
+      Logger.emergency("Logging an emergency message!")
       Log.emergency(:message, {:emergency, :error, __ENV__})
       Process.sleep(@test_wait)
 

@@ -6,7 +6,13 @@ info_path = ~c"./log/info.log"
 warning_path = ~c"./log/warning.log"
 error_path = ~c"./log/error.log"
 
-# Listed by ascending log level...
+# Configuration values...
+format = "\n$date $time [$level] $message\n"
+truncate_default_in_bytes = 8 * 1024
+truncate_in_bytes = truncate_default_in_bytes
+config = %{file: ??, file_check: 5000, max_no_bytes: 300_000, max_no_files: 5}
+
+# By ascending log level...
 colors = [
   debug: :light_cyan,
   info: :light_green,
@@ -14,15 +20,19 @@ colors = [
   error: :light_red
 ]
 
-app = Mix.Project.config()[:app]
-format = "\n$date $time [$level] $message\n"
-formatter = Logger.Formatter.new(format: format, colors: [enabled: false])
-config = %{file: ??, file_check: 5000, max_no_bytes: 300_000, max_no_files: 5}
+formatter =
+  Logger.Formatter.new(
+    format: format,
+    colors: [enabled: false],
+    truncate: truncate_in_bytes
+  )
 
-# config :logger, :default_handler, format: format, colors: colors
-config :logger, :console, format: format, colors: colors
+config :logger, :default_formatter,
+  format: format,
+  colors: colors,
+  truncate: truncate_in_bytes
 
-config app, :logger, [
+config :file_only_logger, :logger, [
   # debug messages and above
   {:handler, :debug_handler, :logger_std_h,
    %{
@@ -61,12 +71,3 @@ config app, :logger, [
 
 # Logs only error messages and above...
 # config :logger, level: :error
-
-# Prevents message truncation...
-# truncate_default_in_bytes = 8 * 1024
-#
-# Logger.Formatter.new(
-#   truncate: truncate_default_in_bytes * 2,
-#   format: format,
-#   colors: [enabled: false]
-# )
