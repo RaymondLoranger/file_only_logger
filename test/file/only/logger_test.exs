@@ -74,7 +74,7 @@ defmodule File.Only.LoggerTest do
 
   require Logger
 
-  alias File.Only.LoggerTest.Log
+  alias __MODULE__.Log
 
   @test_wait get_env(:test_wait)
 

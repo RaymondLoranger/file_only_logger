@@ -49,7 +49,7 @@ defmodule File.Only.Logger do
         """
         \nNote that #{player.name}...
         • Has joined game #{inspect(game.name)}
-        • Game state: #{inspect(game.state)}
+        • Game state: #{inspect(game.state)}\
         """
       end
   '''
@@ -76,7 +76,7 @@ defmodule File.Only.Logger do
       error :exit, {reason} do
         """
         \n'exit' caught...
-        Reason => #{inspect(reason)}
+        Reason => #{inspect(reason)}\
         """
       end
   '''
@@ -116,7 +116,7 @@ defmodule File.Only.Logger do
         """
         \n'exit' caught...
         • Reason: #{inspect(reason)}
-        • Function: #{fun(env)}
+        • Function: #{fun(env)}\
         """
       end
   '''
@@ -146,7 +146,7 @@ defmodule File.Only.Logger do
         """
         \n'exit' caught...
         • Reason: #{inspect(reason)}
-        • Function: #{fun(env) |> maybe_break(12)}
+        • Function: #{fun(env) |> maybe_break(12)}\
         """
       end
   '''
@@ -172,7 +172,7 @@ defmodule File.Only.Logger do
         """
         \n'exit' caught...
         • Reason: #{inspect(reason)}
-        • App: #{app()}
+        • App: #{app()}\
         """
       end
   '''
@@ -193,7 +193,7 @@ defmodule File.Only.Logger do
         """
         \n'exit' caught...
         • Reason: #{inspect(reason)}
-        • Library: #{lib()}
+        • Library: #{lib()}\
         """
       end
   '''
@@ -214,7 +214,7 @@ defmodule File.Only.Logger do
         """
         \n'exit' caught...
         • Reason: #{inspect(reason)}
-        • Module: #{mod()}
+        • Module: #{mod()}\
         """
       end
   '''
@@ -236,7 +236,7 @@ defmodule File.Only.Logger do
         """
         \n'exit' caught...
         • Reason: #{inspect(reason)}
-        #{from(env)}
+        #{from(env)}\
         """
       end
   '''
@@ -258,7 +258,7 @@ defmodule File.Only.Logger do
         """
         \n'exit' caught...
         • Reason: #{inspect(reason)}
-        #{from(env, __MODULE__)}
+        #{from(env, __MODULE__)}\
         """
       end
   '''

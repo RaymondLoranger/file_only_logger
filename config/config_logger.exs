@@ -71,3 +71,13 @@ config :file_only_logger, :logger, [
 
 # Logs only error messages and above...
 # config :logger, level: :error
+
+# line_length =
+#   try do
+#     {keyword, _binding} = Code.eval_file(".formatter.exs")
+#     keyword[:line_length] || 98
+#   rescue
+#     _error -> 80
+#   end
+
+config :file_only_logger, line_length: 80, padding: "\s\s"

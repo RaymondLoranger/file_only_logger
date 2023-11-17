@@ -44,7 +44,7 @@ defmodule Log do
     """
     \n'error' occurred...
     Reason => '#{:file.format_error(reason)}'
-    File => "#{Path.relative_to_cwd(file)}"
+    File => "#{Path.relative_to_cwd(file)}"\
     """
   end
 end

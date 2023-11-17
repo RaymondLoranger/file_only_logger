@@ -30,7 +30,11 @@ defmodule File.Only.Logger.Proxy do
       :ok
 
       iex> alias File.Only.Logger.Proxy
-      iex> Proxy.log(:debug, ['*** Improper ', 'List ' | 'Message ***'])
+      iex> Proxy.log(:debug, ~c"*** charlist message ***")
+      :ok
+
+      iex> alias File.Only.Logger.Proxy
+      iex> Proxy.log(:debug, [~c"*** Improper ", ~c"List " | "Message ***"])
       :ok
 
       iex> alias File.Only.Logger.Proxy
@@ -38,11 +42,11 @@ defmodule File.Only.Logger.Proxy do
       :ok
 
       iex> alias File.Only.Logger.Proxy
-      iex> Proxy.log(:debug, %{'first' => 'Map', 'last' => 'Message'})
+      iex> Proxy.log(:debug, %{~c"first" => ~c"Map", ~c"last" => ~c"Message"})
       :ok
 
       iex> alias File.Only.Logger.Proxy
-      iex> Proxy.log(:debug, first: 'Keyword', last: 'Message')
+      iex> Proxy.log(:debug, first: ~c"Keyword", last: ~c"Message")
       :ok
   """
   @spec log(Logger.level(), message) :: :ok
@@ -54,8 +58,7 @@ defmodule File.Only.Logger.Proxy do
     # Log message with given level...
     :ok = Logger.log(level, message)
     # Allow console messages...
-    :logger.set_handler_config(:default, :level, Logger.level())
-    :ok
+    :ok = :logger.set_handler_config(:default, :level, Logger.level())
   end
 
   @doc """
