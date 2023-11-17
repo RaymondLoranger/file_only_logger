@@ -15,11 +15,12 @@ colors = [
 ]
 
 app = Mix.Project.config()[:app]
-format = "$date $time [$level] $message\n"
+format = "\n$date $time [$level] $message\n"
 formatter = Logger.Formatter.new(format: format, colors: [enabled: false])
 config = %{file: ??, file_check: 5000, max_no_bytes: 300_000, max_no_files: 5}
 
-config :logger, :default_handler, format: format, colors: colors
+# config :logger, :default_handler, format: format, colors: colors
+config :logger, :console, format: format, colors: colors
 
 config app, :logger, [
   # debug messages and above
@@ -61,7 +62,7 @@ config app, :logger, [
 # Logs only error messages and above...
 # config :logger, level: :error
 
-# Limits message size (in bytes)...
+# Prevents message truncation...
 # truncate_default_in_bytes = 8 * 1024
 #
 # Logger.Formatter.new(

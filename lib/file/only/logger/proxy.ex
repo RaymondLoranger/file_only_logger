@@ -206,9 +206,8 @@ defmodule File.Only.Logger.Proxy do
       ...> • App: file_only_logger
       ...> • Library: file_only_logger
       ...> • Function:\s
-      ...>   File.Only.Logger.ProxyTest.
+      ...>   File.Only.Logger.ProxyTest.\
       ...> """
-      ...> |> String.trim_trailing()
       iex> Proxy.from(__ENV__) =~ heredoc
       true
   '''
@@ -217,9 +216,8 @@ defmodule File.Only.Logger.Proxy do
     """
     • App: #{app()}
     • Library: #{lib()}
-    • Function: #{fun(env) |> maybe_break(12)}
+    • Function: #{fun(env) |> maybe_break(12)}\
     """
-    |> String.trim_trailing()
   end
 
   @doc ~S'''
@@ -234,9 +232,8 @@ defmodule File.Only.Logger.Proxy do
       ...> • Library: file_only_logger
       ...> • Module: File.Only.Logger.ProxyTest
       ...> • Function:\s
-      ...>   File.Only.Logger.ProxyTest.
+      ...>   File.Only.Logger.ProxyTest.\
       ...> """
-      ...> |> String.trim_trailing()
       iex> Proxy.from(__ENV__, __MODULE__) =~ heredoc
       true
   '''
@@ -246,9 +243,8 @@ defmodule File.Only.Logger.Proxy do
     • App: #{app()}
     • Library: #{lib()}
     • Module: #{mod(module)}
-    • Function: #{fun(env) |> maybe_break(12)}
+    • Function: #{fun(env) |> maybe_break(12)}\
     """
-    |> String.trim_trailing()
   end
 
   ## Private functions

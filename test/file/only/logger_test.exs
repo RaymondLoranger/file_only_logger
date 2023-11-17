@@ -6,7 +6,7 @@ defmodule File.Only.LoggerTest.Log do
     \nActual '#{logged_as}' message no longer reported as '#{no_longer_as}'...
     • Logged as: '#{logged_as}'
     • No longer reported as: '#{no_longer_as}'
-    #{from(env, __MODULE__)}
+    #{from(env, __MODULE__)}\
     """
   end
 
@@ -35,7 +35,7 @@ defmodule File.Only.LoggerTest.Log do
     \nNote that #{player.name}...
     • Has joined game: #{inspect(game.name)}
     • Game state: #{inspect(game.state)}
-    #{from(env, __MODULE__)}
+    #{from(env, __MODULE__)}\
     """
   end
 
@@ -46,7 +46,7 @@ defmodule File.Only.LoggerTest.Log do
     • Game state: #{inspect(game.state)}
     • App: #{app()}
     • Library: #{lib()}
-    • Module: #{mod()}
+    • Module: #{mod()}\
     """
   end
 
@@ -55,7 +55,7 @@ defmodule File.Only.LoggerTest.Log do
     \nApplication environment:
     • For app: #{app}
     • Key-value pairs:
-      #{inspect(all_env)}
+      #{inspect(all_env)}\
     """
   end
 
@@ -63,7 +63,7 @@ defmodule File.Only.LoggerTest.Log do
     """
     \nChecking line break with binary arg:
     • Relative path: #{Path.relative_to_cwd(env.file) |> maybe_break(17)}
-    • Absolute path: #{Path.expand(env.file) |> maybe_break(17)}
+    • Absolute path: #{Path.expand(env.file) |> maybe_break(17)}\
     """
   end
 end
@@ -72,7 +72,8 @@ defmodule File.Only.LoggerTest do
   use ExUnit.Case, async: true
   use PersistConfig
 
-  alias File.Only.Logger
+  require Logger
+
   alias File.Only.LoggerTest.Log
 
   @test_wait get_env(:test_wait)
@@ -103,6 +104,7 @@ defmodule File.Only.LoggerTest do
 
   describe "Log.notice/2" do
     test "logs a notice message", %{paths: paths} do
+      Logger.notice("Logging a notice message")
       Log.notice(:message, {:notice, :info, __ENV__})
       Process.sleep(@test_wait)
 
@@ -115,6 +117,7 @@ defmodule File.Only.LoggerTest do
 
   describe "Log.warning/2" do
     test "logs a warning message", %{paths: paths} do
+      Logger.warning("Logging a warning message")
       Log.warning(:message, {:warning, :warn, __ENV__})
       Process.sleep(@test_wait)
 
@@ -127,6 +130,7 @@ defmodule File.Only.LoggerTest do
 
   describe "Log.critical/2" do
     test "logs a critical message", %{paths: paths} do
+      Logger.critical("Logging a critical message")
       Log.critical(:message, {:critical, :error, __ENV__})
       Process.sleep(@test_wait)
 
@@ -139,6 +143,7 @@ defmodule File.Only.LoggerTest do
 
   describe "Log.alert/2" do
     test "logs an alert message", %{paths: paths} do
+      Logger.alert("Logging an alert message")
       Log.alert(:message, {:alert, :error, __ENV__})
       Process.sleep(@test_wait)
 
@@ -151,6 +156,7 @@ defmodule File.Only.LoggerTest do
 
   describe "Log.emergency/2" do
     test "logs an emergency message", %{paths: paths} do
+      Logger.emergency("Logging an emergency message")
       Log.emergency(:message, {:emergency, :error, __ENV__})
       Process.sleep(@test_wait)
 
