@@ -80,4 +80,5 @@ config :file_only_logger, :logger, [
 #     _error -> 80
 #   end
 
+# Changes here require to recompile app :file_only_logger.
 config :file_only_logger, line_length: 80, padding: "\s\s"
