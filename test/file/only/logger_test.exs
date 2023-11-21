@@ -76,6 +76,7 @@ defmodule File.Only.LoggerTest do
 
   alias __MODULE__.Log
 
+  @env get_env(:env)
   @test_wait get_env(:test_wait)
 
   doctest Logger
@@ -246,6 +247,20 @@ defmodule File.Only.LoggerTest do
              • Relative path: test/file/only/logger_test.exs
              • Absolute path:\s
              """
+    end
+  end
+
+  describe "config/runtime.exs overrides config/config.exs" do
+    test "runtime.exs if present overrides config.exs" do
+      if File.exists?("config/runtime.exs") do
+        Logger.notice("'config/runtime.exs' exists...")
+        Logger.notice("env is #{@env}")
+        assert @env == "test ➔ from config/runtime.exs"
+      else
+        Logger.notice("'config/runtime.exs' does not exist...")
+        Logger.notice("env is #{@env}")
+        assert @env == "test ➔ from config/config.exs"
+      end
     end
   end
 end
