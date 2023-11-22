@@ -96,7 +96,7 @@ defmodule File.Only.LoggerTest do
     paths =
       for {:handler, _handler_id, :logger_std_h,
            %{level: level, config: %{file: path}}} <-
-            Application.get_env(:file_only_logger, :logger),
+            Application.get_env(:file_only_logger, :logger, []),
           into: %{},
           do: {level, path}
 
