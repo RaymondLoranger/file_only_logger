@@ -8,9 +8,12 @@ defmodule File.Only.Logger.Proxy do
   require Logger
 
   @levels get_env(:levels)
+  @default_line_length get_env(:default_line_length)
+  @default_padding get_env(:default_padding)
+
   @lib Mix.Project.config()[:app]
-  @line_length get_env(:line_length)
-  @padding get_env(:padding)
+  @line_length get_env(:line_length, @default_line_length)
+  @padding get_env(:padding, @default_padding)
 
   @typedoc "Message to be logged"
   @type message :: String.t() | iodata | fun | keyword | map

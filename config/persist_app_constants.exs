@@ -14,3 +14,5 @@ config :file_only_logger,
   ]
 
 config :file_only_logger, test_wait: 222
+config :file_only_logger, default_line_length: 80
+config :file_only_logger, default_padding: "\s\s"
