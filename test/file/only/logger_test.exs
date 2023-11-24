@@ -96,7 +96,7 @@ defmodule File.Only.LoggerTest do
     paths =
       for {:handler, _handler_id, :logger_std_h,
            %{level: level, config: %{file: path}}} <-
-            Application.get_env(:file_only_logger, :logger, []),
+            get_app_env(:file_only_logger, :logger, []),
           into: %{},
           do: {level, path}
 
@@ -225,7 +225,7 @@ defmodule File.Only.LoggerTest do
       use File.Only.Logger
 
       app = lib()
-      all_env = Application.get_all_env(app)
+      all_env = get_all_env(app)
       Log.info(:all_env, {app, all_env})
       Process.sleep(@test_wait)
 
