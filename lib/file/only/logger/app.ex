@@ -6,7 +6,7 @@ defmodule File.Only.Logger.App do
     :logger.get_handler_config() |> dbg()
 
     # Prevent console messages...
-    :logger.set_handler_config(:default, :level, :none)
+    :ok = :logger.set_handler_config(:default, :level, :none)
 
     :logger.get_handler_config() |> dbg()
 
@@ -26,6 +26,7 @@ defmodule File.Only.Logger.App do
         # Allow console messages...
         :ok = :logger.set_handler_config(:default, :level, Logger.level())
         :logger.get_handler_config() |> dbg()
+
         {:ok, self()}
     end
   end
