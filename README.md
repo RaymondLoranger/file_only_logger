@@ -25,9 +25,9 @@ simply cause the message to be ignored.
 
 The configuration values for log level are:
 
- :all (default)
- :none
- [Logger.level()](https://hexdocs.pm/logger/Logger.html#t:level/0)
+ - :all (default)
+ - :none
+ - [Logger.level()](https://hexdocs.pm/logger/Logger.html#t:level/0)
 
 You may use file `config/runtime.exs` to configure the above log level:
 
