@@ -7,7 +7,7 @@ defmodule File.Only.Logger.IE.Log do
     """
     \n'exit' caught...
     • Reason: #{inspect(reason) |> maybe_break(10)}
-    #{from(env)}
+    #{from(env)}\
     """
   end
 
@@ -16,7 +16,7 @@ defmodule File.Only.Logger.IE.Log do
     \nSaving game...
     • Server: #{via(game.name) |> inspect() |> maybe_break(10)}
     • Game being saved: #{inspect(game) |> maybe_break(20)}
-    #{from(env, __MODULE__)}
+    #{from(env, __MODULE__)}\
     """
   end
 
@@ -24,7 +24,7 @@ defmodule File.Only.Logger.IE.Log do
     """
     \n'error' occurred...
     Reason => '#{:file.format_error(reason)}'
-    File => "#{Path.relative_to_cwd(file)}"
+    File => "#{Path.relative_to_cwd(file)}"\
     """
   end
 
