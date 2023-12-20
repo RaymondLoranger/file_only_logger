@@ -15,8 +15,8 @@ def deps do
 end
 ```
 
-Proper configuration must be set via config files. See `config/config.exs` and
-`config/config_logger.exs` as an example.
+Proper configuration must be set via config files. See files `config/config.exs`
+and `config/config_logger.exs` as an example (including log file rotation).
 
 ## Usage
 
