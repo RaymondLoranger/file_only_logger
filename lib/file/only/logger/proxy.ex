@@ -45,11 +45,11 @@ defmodule File.Only.Logger.Proxy do
       :ok
 
       iex> alias File.Only.Logger.Proxy
-      iex> Proxy.log(:debug, %{~c"first" => ~c"Map", ~c"last" => ~c"Message"})
+      iex> Proxy.log(:debug, %{"first" => {1, 2, 3}, "last" => [1, 2, 3]})
       :ok
 
       iex> alias File.Only.Logger.Proxy
-      iex> Proxy.log(:debug, first: ~c"Keyword", last: ~c"Message")
+      iex> Proxy.log(:debug, first: {?a, ?b, ?c}, last: [0, 1, 2])
       :ok
   """
   @spec log(Logger.level(), message) :: :ok
@@ -123,7 +123,7 @@ defmodule File.Only.Logger.Proxy do
       """
 
       iex> import File.Only.Logger.Proxy, only: [maybe_break: 3]
-      iex> supercal = ~c"supercalifragilisticexpialidocious"
+      iex> supercal = :supercalifragilisticexpialidocious
       iex> msg = "Today I'm feeling astonishingly #{supercal}..."
       iex> """
       ...> -- Message: #{inspect(msg) |> maybe_break(12, padding: "\s\s\s")}
@@ -212,7 +212,7 @@ defmodule File.Only.Logger.Proxy do
       ...> • App: file_only_logger
       ...> • Library: file_only_logger
       ...> • Function:\s
-      ...>   File.Only.Logger.ProxyTest.\
+      ...>   File.Only.Logger.ProxyTest.'doctest\
       ...> """
       iex> Proxy.from(__ENV__) =~ heredoc
       true
@@ -238,7 +238,7 @@ defmodule File.Only.Logger.Proxy do
       ...> • Library: file_only_logger
       ...> • Module: File.Only.Logger.ProxyTest
       ...> • Function:\s
-      ...>   File.Only.Logger.ProxyTest.\
+      ...>   File.Only.Logger.ProxyTest.'doctest\
       ...> """
       iex> Proxy.from(__ENV__, __MODULE__) =~ heredoc
       true
