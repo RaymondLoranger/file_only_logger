@@ -2,7 +2,7 @@ defmodule File.Only.Logger.App do
   use Application
 
   @spec start(Application.start_type(), term) :: {:ok, pid}
-  def start(_start_type, :ok = _start_args) do
+  def start(_start_type, _start_args = :ok) do
     # dbg_handler_config("Before preventing console messages...", __ENV__)
     # Prevent console messages...
     :ok = :logger.set_handler_config(:default, :level, :none)
