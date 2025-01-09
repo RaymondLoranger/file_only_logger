@@ -178,7 +178,7 @@ defmodule File.Only.Logger do
   '''
   defmacro app do
     quote do
-      File.Only.Logger.Proxy.app()
+      File.Only.Logger.Proxy.app(__MODULE__)
     end
   end
 

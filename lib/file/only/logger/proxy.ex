@@ -11,7 +11,6 @@ defmodule File.Only.Logger.Proxy do
   @default_line_length get_env(:default_line_length)
   @default_padding get_env(:default_padding)
 
-  @lib Mix.Project.config()[:app]
   @line_length get_env(:line_length, @default_line_length)
   @padding get_env(:padding, @default_padding)
 
@@ -154,22 +153,26 @@ defmodule File.Only.Logger.Proxy do
   end
 
   @doc """
-  Returns the application for the current process or module.
+  Returns the application for the current process or for the given module.
 
   Returns `:undefined` if the current process does not belong to any
-  application or the current module is not listed in any application spec.
+  application or the given module is not listed in any application spec.
 
   ## Examples
 
       iex> alias File.Only.Logger.Proxy
-      iex> Proxy.app
+      iex> Proxy.app(__MODULE__)
+      :undefined
+
+      iex> alias File.Only.Logger.Proxy
+      iex> Proxy.app(Proxy)
       :file_only_logger
   """
-  @spec app :: atom
-  def app do
+  @spec app(module) :: atom
+  def app(module) do
     case :application.get_application() do
       {:ok, app} -> app
-      :undefined -> Application.get_application(__MODULE__) || :undefined
+      :undefined -> Application.get_application(module) || :undefined
     end
   end
 
@@ -183,7 +186,7 @@ defmodule File.Only.Logger.Proxy do
       :file_only_logger
   """
   @spec lib :: atom
-  def lib, do: @lib
+  def lib, do: Mix.Project.config()[:app]
 
   @doc """
   Returns the given `module` as a string.
@@ -209,7 +212,7 @@ defmodule File.Only.Logger.Proxy do
 
       iex> alias File.Only.Logger.Proxy
       iex> heredoc = """
-      ...> • App: file_only_logger
+      ...> • App: undefined
       ...> • Library: file_only_logger
       ...> • Function:\s
       ...>   File.Only.Logger.ProxyTest.'doctest\
@@ -220,7 +223,7 @@ defmodule File.Only.Logger.Proxy do
   @spec from(Macro.Env.t()) :: String.t()
   def from(env) do
     """
-    • App: #{app()}
+    • App: #{app(env.module)}
     • Library: #{lib()}
     • Function: #{fun(env) |> maybe_break(12)}\
     """
@@ -234,7 +237,7 @@ defmodule File.Only.Logger.Proxy do
 
       iex> alias File.Only.Logger.Proxy
       iex> heredoc = """
-      ...> • App: file_only_logger
+      ...> • App: undefined
       ...> • Library: file_only_logger
       ...> • Module: File.Only.Logger.ProxyTest
       ...> • Function:\s
@@ -246,7 +249,7 @@ defmodule File.Only.Logger.Proxy do
   @spec from(Macro.Env.t(), module) :: String.t()
   def from(env, module) do
     """
-    • App: #{app()}
+    • App: #{app(env.module)}
     • Library: #{lib()}
     • Module: #{mod(module)}
     • Function: #{fun(env) |> maybe_break(12)}\

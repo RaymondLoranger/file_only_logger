@@ -178,7 +178,7 @@ defmodule File.Only.LoggerTest do
       Note that Stephan...
       • Has joined game: STEPHAN
       • Game state: :starting
-      • App: file_only_logger
+      • App: undefined
       • Library: file_only_logger
       • Module: File.Only.LoggerTest.Log
       • Function:\s
@@ -197,7 +197,7 @@ defmodule File.Only.LoggerTest do
       Note that Anthony...
       • Has joined game: ANTHONY
       • Game state: :on_going
-      • App: file_only_logger
+      • App: undefined
       • Library: file_only_logger
       • Module: File.Only.LoggerTest.Log
       • Function: File.Only.LoggerTest.'test Log.info/2 logs similar info msg'/1
@@ -215,7 +215,7 @@ defmodule File.Only.LoggerTest do
              Note that Raymond...
              • Has joined game: RAYMOND
              • Game state: :stopping
-             • App: file_only_logger
+             • App: undefined
              • Library: file_only_logger
              • Module: File.Only.LoggerTest.Log
              """
