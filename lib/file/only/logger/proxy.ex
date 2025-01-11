@@ -182,7 +182,7 @@ defmodule File.Only.Logger.Proxy do
   ## Examples
 
       iex> alias File.Only.Logger.Proxy
-      iex> Proxy.lib
+      iex> Proxy.lib()
       :file_only_logger
   """
   @spec lib :: atom

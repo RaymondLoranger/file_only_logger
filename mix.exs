@@ -4,16 +4,16 @@ defmodule File.Only.Logger.MixProject do
   def project do
     [
       app: :file_only_logger,
-      version: "0.2.29",
+      version: "0.2.30",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       name: "File-Only Logger",
       source_url: source_url(),
       description: description(),
       package: package(),
-      deps: deps(),
+      deps: deps()
       # See File.Only.Logger.Proxy.lib/0...
-      dialyzer: [plt_add_apps: [:mix]]
+      # dialyzer: [plt_add_apps: [:mix]]
     ]
   end
 
@@ -39,7 +39,7 @@ defmodule File.Only.Logger.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger, :observer, :wx, :runtime_tools],
+      extra_applications: [:logger, :observer, :wx, :runtime_tools, :mix],
       mod: {File.Only.Logger.App, :ok}
     ]
   end

@@ -79,7 +79,7 @@ defmodule File.Only.LoggerTest do
   @env get_env(:env)
   @test_wait get_env(:test_wait)
 
-  doctest Logger
+  doctest File.Only.Logger
 
   setup_all do
     anthony = %{name: "Anthony", points: 43}
