@@ -185,6 +185,7 @@ defmodule File.Only.Logger.Proxy do
       iex> Proxy.lib()
       :file_only_logger
   """
+
   @spec lib :: atom
   def lib, do: Mix.Project.config()[:app]
 

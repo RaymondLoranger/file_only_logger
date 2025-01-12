@@ -199,7 +199,7 @@ defmodule File.Only.Logger do
   '''
   defmacro lib do
     quote do
-      File.Only.Logger.Proxy.lib()
+      Mix.Project.config()[:app]
     end
   end
 
