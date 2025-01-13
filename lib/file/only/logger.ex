@@ -183,27 +183,6 @@ defmodule File.Only.Logger do
   end
 
   @doc ~S'''
-  Returns the current library name.
-
-  ## Examples
-
-      use File.Only.Logger
-
-      error :exit, {reason} do
-        """
-        \n'exit' caught...
-        • Reason: #{inspect(reason)}
-        • Library: #{lib()}\
-        """
-      end
-  '''
-  defmacro lib do
-    quote do
-      Mix.Project.config()[:app]
-    end
-  end
-
-  @doc ~S'''
   Returns the current module as a string.
 
   ## Examples

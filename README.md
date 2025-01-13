@@ -63,22 +63,20 @@ Check.log_warning(__ENV__.file)
 Check.log_warning("generate-line-break")
 # will respectively log these lines in the configured log file(s):
 
-2023-12-20 11:37:17.011 [warning]
+2025-01-13 12:27:14.532 [warning]
 'error' occurred...
 Reason => 'no such file or directory'
 File => "c:/Users/Ray/Documents/ex_dev/projects/file_only_logger/iex"
-• App: file_only_logger
-• Library: file_only_logger
+• App: undefined
 • Module: Log
 • Function: Check.log_warning/1
 
-2023-12-20 11:45:13.274 [warning]
+2025-01-13 12:30:46.370 [warning]
 'error' occurred...
 Reason => 'no such file or directory'
 File =>
   "c:/Users/Ray/Documents/ex_dev/projects/file_only_logger/generate-line-break"
-• App: file_only_logger
-• Library: file_only_logger
+• App: undefined
 • Module: Log
 • Function: Check.log_warning/1
 ```

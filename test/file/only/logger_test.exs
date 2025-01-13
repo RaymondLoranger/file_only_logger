@@ -45,7 +45,6 @@ defmodule File.Only.LoggerTest.Log do
     • Has joined game: #{inspect(game.name)}
     • Game state: #{inspect(game.state)}
     • App: #{app()}
-    • Library: #{lib()}
     • Module: #{mod()}\
     """
   end
@@ -179,7 +178,6 @@ defmodule File.Only.LoggerTest do
       • Has joined game: STEPHAN
       • Game state: :starting
       • App: undefined
-      • Library: file_only_logger
       • Module: File.Only.LoggerTest.Log
       • Function:\s
         File.Only.LoggerTest.'test Log.info/2 logs an i-n-f-o m-e-s-s-a-g-e'/1
@@ -198,7 +196,6 @@ defmodule File.Only.LoggerTest do
       • Has joined game: ANTHONY
       • Game state: :on_going
       • App: undefined
-      • Library: file_only_logger
       • Module: File.Only.LoggerTest.Log
       • Function: File.Only.LoggerTest.'test Log.info/2 logs similar info msg'/1
       """
@@ -216,7 +213,6 @@ defmodule File.Only.LoggerTest do
              • Has joined game: RAYMOND
              • Game state: :stopping
              • App: undefined
-             • Library: file_only_logger
              • Module: File.Only.LoggerTest.Log
              """
     end
@@ -224,7 +220,7 @@ defmodule File.Only.LoggerTest do
     test "logs extra info message", %{paths: paths} do
       use File.Only.Logger
 
-      app = lib()
+      app = Mix.Project.config()[:app]
       all_env = get_all_env(app)
       Log.info(:all_env, {app, all_env})
       Process.sleep(@test_wait)

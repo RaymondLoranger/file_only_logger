@@ -177,19 +177,6 @@ defmodule File.Only.Logger.Proxy do
   end
 
   @doc """
-  Returns the current library name.
-
-  ## Examples
-
-      iex> alias File.Only.Logger.Proxy
-      iex> Proxy.lib()
-      :file_only_logger
-  """
-
-  @spec lib :: atom
-  def lib, do: Mix.Project.config()[:app]
-
-  @doc """
   Returns the given `module` as a string.
 
   ## Examples
@@ -214,7 +201,6 @@ defmodule File.Only.Logger.Proxy do
       iex> alias File.Only.Logger.Proxy
       iex> heredoc = """
       ...> • App: undefined
-      ...> • Library: file_only_logger
       ...> • Function:\s
       ...>   File.Only.Logger.ProxyTest.'doctest\
       ...> """
@@ -225,7 +211,6 @@ defmodule File.Only.Logger.Proxy do
   def from(env) do
     """
     • App: #{app(env.module)}
-    • Library: #{lib()}
     • Function: #{fun(env) |> maybe_break(12)}\
     """
   end
@@ -239,7 +224,6 @@ defmodule File.Only.Logger.Proxy do
       iex> alias File.Only.Logger.Proxy
       iex> heredoc = """
       ...> • App: undefined
-      ...> • Library: file_only_logger
       ...> • Module: File.Only.Logger.ProxyTest
       ...> • Function:\s
       ...>   File.Only.Logger.ProxyTest.'doctest\
@@ -251,7 +235,6 @@ defmodule File.Only.Logger.Proxy do
   def from(env, module) do
     """
     • App: #{app(env.module)}
-    • Library: #{lib()}
     • Module: #{mod(module)}
     • Function: #{fun(env) |> maybe_break(12)}\
     """
