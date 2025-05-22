@@ -60,7 +60,7 @@ defmodule File.Only.Logger.Proxy do
     # Log message with given level...
     :ok = Logger.log(level, message)
     # Allow console messages...
-    :ok = :logger.set_handler_config(:default, :level, Logger.level())
+    :logger.set_handler_config(:default, :level, Logger.level())
   end
 
   @doc """
