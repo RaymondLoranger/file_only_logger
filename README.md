@@ -80,3 +80,26 @@ File =>
 • Module: Log
 • Function: Check.log_warning/1
 ```
+
+## Notes
+
+If you'd like to write a message to both the log files _and the console_,
+simply change the macro to a function like so...
+
+#### Example
+
+```elixir
+defmodule Log do
+  use File.Only.Logger
+
+  require Logger
+
+  def warning(:error_occurred, {reason, file, env}) do
+    Logger.warning("""
+    \n'error' occurred...
+    Reason => '#{:file.format_error(reason)}'
+    File => #{Path.expand(file) |> inspect() |> maybe_break(8)}
+    #{from(env, __MODULE__)}\
+    """)
+  end
+end
