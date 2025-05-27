@@ -81,7 +81,7 @@ File =>
 • Function: Check.log_warning/1
 ```
 
-## Notes
+## Note
 
 If you'd like to write a message to both the log files _and the console_,
 simply change the macro to a function like so...
