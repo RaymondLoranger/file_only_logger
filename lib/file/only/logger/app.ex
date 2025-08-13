@@ -11,7 +11,7 @@ defmodule File.Only.Logger.App do
 
   @spec start(Application.start_type(), term) :: {:ok, pid}
   def start(_start_type, _start_args = :ok) do
-    add_handlers(:file_only_logger, @handler_id in :logger.get_handler_ids())
+    :ok = add_handlers(@app, @handler_id in :logger.get_handler_ids())
     {:ok, self()}
   end
 
