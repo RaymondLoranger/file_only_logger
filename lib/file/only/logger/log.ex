@@ -5,7 +5,7 @@ defmodule File.Only.Logger.Log do
     """
     \nError adding configured handlers...
     • Call: 'Logger.add_handlers/1'
-    • App argument: #{app}
+    • App argument: #{inspect(app)}
     • Reason: #{inspect(reason) |> maybe_break(10)}
     #{from(env, __MODULE__)}\
     """
