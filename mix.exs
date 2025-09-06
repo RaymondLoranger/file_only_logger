@@ -47,7 +47,8 @@ defmodule File.Only.Logger.MixProject do
     [
       {:dialyxir, "~> 1.0", only: :dev, runtime: false},
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
-      {:persist_config, "~> 0.4", runtime: false}
+      # {:persist_config, "~> 0.4", runtime: false}
+      {:persist_config, path: "../persist_config"}
     ]
   end
 end
