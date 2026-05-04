@@ -2,7 +2,7 @@ import Config
 
 config :elixir, ansi_enabled: true
 
-import_config "config_logger.exs"
+# import_config "config_logger.exs"
 
 # For testing purposes only...
 config :file_only_logger,
