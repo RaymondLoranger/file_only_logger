@@ -27,7 +27,13 @@ defmodule File.Only.Logger.MixProject do
 
   defp package do
     [
-      files: ["lib", "mix.exs", "README*", "config/persist*.exs"],
+      files: [
+        # NOTE: ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
+        "lib/file/only/{logger,logger.ex}",
+        "mix.exs",
+        "README*",
+        "config/persist*.exs"
+      ],
       maintainers: ["Raymond Loranger"],
       licenses: ["MIT"],
       links: %{"GitHub" => source_url()}

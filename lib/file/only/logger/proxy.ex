@@ -188,6 +188,10 @@ defmodule File.Only.Logger.Proxy do
       iex> alias File.Only.Logger.Proxy
       iex> Proxy.mod(Elixir.Date.Range)
       "Date.Range"
+
+      iex> alias File.Only.Logger.Proxy
+      iex> Proxy.mod(IO.ANSI)
+      "IO.ANSI"
   """
   @spec mod(module) :: String.t()
   def mod(module), do: inspect(module)
