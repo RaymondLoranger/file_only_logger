@@ -15,7 +15,7 @@ def deps do
 end
 ```
 
-Logger configuration may but _does not have_ be set via config files.
+Logger configuration may but _does not have_ to be set via config files.
 See files `config/config.exs` and `config/config_logger.exs` as an example
 (including log file rotation).
 
