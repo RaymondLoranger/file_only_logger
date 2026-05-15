@@ -3,7 +3,7 @@ defmodule File.Only.Logger.Log do
 
   require Logger
 
-  # Log to both log file and console...
+  # Log to both log files and console...
 
   @spec error(atom, tuple) :: :ok
   def error(:add_handler, {reason, handler_id, env}) do

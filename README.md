@@ -19,6 +19,25 @@ Logger configuration may but _does not have_ to be set via config files.
 See files `config/config.exs` and `config/config_logger.exs` as an example
 (including log file rotation).
 
+In the absence of any configuration, the default handler (`:default`) will
+feature the following colors:
+
+| Level    | Color         |
+| -------- | ------------- |
+| :debug   | :light_cyan   |
+| :info    | :light_green  |
+| :warning | :light_yellow |
+| :error   | :light_red    |
+
+Likewise without any configuration, the handlers below will log to their
+corresponding files with a log rotation of 5:
+
+| Level    | Handler          | File                |
+| -------- | ---------------- | ------------------- |
+| :debug   | :debug_handler   | "./log/debug.log"   |
+| :info    | :info_handler    | "./log/info.log"    |
+| :warning | :warning_handler | "./log/warning.log" |
+| :error   | :error_handler   | "./log/error.log"   |
 
 ## Usage
 
@@ -29,7 +48,7 @@ The configuration values for log level are:
 
 - :all (default)
 - :none
-- [Logger.level()](https://hexdocs.pm/logger/Logger.html#t:level/0)
+- [Levels](https://hexdocs.pm/logger/Logger.html#module-levels)
 
 You may use file `config/runtime.exs` to configure the above log level:
 
@@ -48,8 +67,8 @@ defmodule Log do
   warning :error_occurred, {reason, file, env} do
     """
     \n'error' occurred...
-    Reason => '#{:file.format_error(reason)}'
-    File => #{Path.expand(file) |> inspect() |> maybe_break(8)}
+    • Reason => '#{:file.format_error(reason)}'
+    • File => #{Path.expand(file) |> inspect() |> maybe_break(10)}
     #{from(env, __MODULE__)}\
     """
   end
@@ -67,16 +86,16 @@ Check.log_warning("generate-line-break")
 
 2025-01-13 12:27:14.532 [warning]
 'error' occurred...
-Reason => 'no such file or directory'
-File => "c:/Users/Ray/Documents/ex_dev/projects/file_only_logger/iex"
+• Reason => 'no such file or directory'
+• File => "c:/Users/Ray/Documents/ex_dev/projects/file_only_logger/iex"
 • App: undefined
 • Module: Log
 • Function: Check.log_warning/1
 
 2025-01-13 12:30:46.370 [warning]
 'error' occurred...
-Reason => 'no such file or directory'
-File =>
+• Reason => 'no such file or directory'
+• File =>
   "c:/Users/Ray/Documents/ex_dev/projects/file_only_logger/generate-line-break"
 • App: undefined
 • Module: Log
@@ -99,8 +118,8 @@ defmodule Log do
   def warning(:error_occurred, {reason, file, env}) do
     Logger.warning("""
     \n'error' occurred...
-    Reason => '#{:file.format_error(reason)}'
-    File => #{Path.expand(file) |> inspect() |> maybe_break(8)}
+    • Reason => '#{:file.format_error(reason)}'
+    • File => #{Path.expand(file) |> inspect() |> maybe_break(10)}
     #{from(env, __MODULE__)}\
     """)
   end

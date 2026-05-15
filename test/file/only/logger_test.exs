@@ -81,10 +81,12 @@ defmodule File.Only.LoggerTest do
   doctest File.Only.Logger
 
   setup_all do
+    # Players...
     anthony = %{name: "Anthony", points: 43}
     stephan = %{name: "Stephan", points: 34}
     raymond = %{name: "Raymond", points: 56}
 
+    # Games...
     anthony = %{name: ANTHONY, state: :on_going, player: anthony}
     stephan = %{name: STEPHAN, state: :starting, player: stephan}
     raymond = %{name: RAYMOND, state: :stopping, player: raymond}

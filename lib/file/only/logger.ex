@@ -91,6 +91,12 @@ defmodule File.Only.Logger do
   end
 
   for level <- @levels -- [:info, :error] do
+    @doc """
+    Injects function `#{level}/2` into the caller's module.
+
+    The function will execute the `do_block` and write its result to the
+    configured #{level} log file.
+    """
     defmacro unquote(level)(message_id, variables, do_block)
 
     defmacro unquote(level)(message_id, variables, do: message) do
