@@ -30,7 +30,8 @@ feature the following colors:
 | :error   | :light_red    |
 
 Likewise without any configuration, the handlers below will log to their
-corresponding files with a log rotation of 5:
+corresponding files with a log rotation of 5 files (for example the active file
+"debug.log" plus 5 archives: "debug.log.0" up to "debug.log.4"):
 
 | Level    | Handler          | File                |
 | -------- | ---------------- | ------------------- |
