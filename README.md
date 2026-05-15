@@ -19,8 +19,8 @@ Logger configuration may but _does not have_ to be set via config files.
 See files `config/config.exs` and `config/config_logger.exs` as an example
 (including log file rotation).
 
-In the absence of any configuration, the default handler (`:default`) will
-feature the following colors:
+In the absence of any manual configuration, the default handler (`:default`)
+will automatically feature the following colors:
 
 | Level    | Color         |
 | -------- | ------------- |
@@ -29,9 +29,8 @@ feature the following colors:
 | :warning | :light_yellow |
 | :error   | :light_red    |
 
-Likewise without any configuration, the handlers below will log to their
-corresponding files with a log rotation of 5 files (for example, the active file
-"debug.log" plus 5 archives: "debug.log.0" up to "debug.log.4"):
+Likewise without any manual configuration, the handlers below will automatically
+log to their corresponding files:
 
 | Level    | Handler          | File                |
 | -------- | ---------------- | ------------------- |
@@ -39,6 +38,9 @@ corresponding files with a log rotation of 5 files (for example, the active file
 | :info    | :info_handler    | "./log/info.log"    |
 | :warning | :warning_handler | "./log/warning.log" |
 | :error   | :error_handler   | "./log/error.log"   |
+
+All of the files above will have a log rotation of 5 archives. For example,
+active file "debug.log" may have 5 archives: "debug.log.0" up to "debug.log.4".
 
 ## Usage
 
