@@ -4,7 +4,7 @@ defmodule File.Only.Logger.MixProject do
   def project do
     [
       app: :file_only_logger,
-      version: "0.2.61",
+      version: "0.2.62",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       name: "File-Only Logger",
@@ -26,11 +26,12 @@ defmodule File.Only.Logger.MixProject do
   end
 
   defp package do
+    #  ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
+    files =
+      ~w[lib/file/only/{logger,logger.ex} mix.exs README* config/persist*.exs]
+
     [
-      files: ~w[
-        # ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
-        lib/file/only/{logger,logger.ex} mix.exs README* config/persist*.exs
-      ],
+      files: files,
       maintainers: ["Raymond Loranger"],
       licenses: ["MIT"],
       links: %{"GitHub" => source_url()}
