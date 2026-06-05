@@ -30,7 +30,7 @@ will automatically feature the following colors:
 | :error   | :light_red    |
 
 Likewise without any manual configuration, the handlers below will automatically
-be added and will log to their corresponding files:
+be added and will log to their corresponding log files:
 
 | _Level_  | _Handler ID_     | _Log File_          |
 | :------- | :--------------- | :------------------ |
