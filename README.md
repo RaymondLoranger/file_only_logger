@@ -32,7 +32,7 @@ will automatically feature the following colors:
 Likewise without any manual configuration, the handlers below will automatically
 be added and will log to their corresponding files:
 
-| _Level_  | _Handler ID_     | _File_              |
+| _Level_  | _Handler ID_     | _Log File_          |
 | :------- | :--------------- | :------------------ |
 | :debug   | :debug_handler   | "./log/debug.log"   |
 | :info    | :info_handler    | "./log/info.log"    |
