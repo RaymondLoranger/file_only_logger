@@ -22,8 +22,8 @@ See files `config/config.exs` and `config/config_logger.exs` as an example
 In the absence of any manual configuration, the default handler (`:default`)
 will automatically feature the following colors:
 
-| Level    | Color         |
-| -------- | ------------- |
+| _Level_  | _Color_       |
+| :------- | :------------ |
 | :debug   | :light_cyan   |
 | :info    | :light_green  |
 | :warning | :light_yellow |
@@ -32,8 +32,8 @@ will automatically feature the following colors:
 Likewise without any manual configuration, the handlers below will automatically
 be added and will log to these corresponding files:
 
-| Level    | Handler          | File                |
-| -------- | ---------------- | ------------------- |
+| _Level_  | _Handler_        | _File_              |
+| :------- | :--------------- | :------------------ |
 | :debug   | :debug_handler   | "./log/debug.log"   |
 | :info    | :info_handler    | "./log/info.log"    |
 | :warning | :warning_handler | "./log/warning.log" |
