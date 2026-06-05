@@ -30,7 +30,7 @@ will automatically feature the following colors:
 | :error   | :light_red    |
 
 Likewise without any manual configuration, the handlers below will automatically
-log to their corresponding files:
+be added and will log to these corresponding files:
 
 | Level    | Handler          | File                |
 | -------- | ---------------- | ------------------- |
@@ -51,7 +51,7 @@ The configuration values for log level are:
 
 - :all (default)
 - :none
-- [Levels](https://hexdocs.pm/logger/Logger.html#module-levels)
+- [Level](https://hexdocs.pm/logger/Logger.html#module-levels)
 
 You may use file `config/runtime.exs` to configure the above log level:
 

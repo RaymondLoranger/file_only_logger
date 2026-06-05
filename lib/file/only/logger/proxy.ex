@@ -51,7 +51,7 @@ defmodule File.Only.Logger.Proxy do
       iex> Proxy.log(:debug, first: {?a, ?b, ?c}, last: [0, 1, 2])
       :ok
   """
-  @spec log(Logger.level(), message) :: :ok
+  @spec log(:logger.level(), message) :: :ok
   def log(level, message) when level in @levels do
     # Set log level to runtime config value (defaults to :all)...
     :ok = Logger.configure(level: level())
@@ -246,6 +246,6 @@ defmodule File.Only.Logger.Proxy do
 
   ## Private functions
 
-  @spec level :: Logger.level() | :all | :none
+  @spec level :: :all | :none | :logger.level()
   defp level, do: get_env(:level, :all)
 end
