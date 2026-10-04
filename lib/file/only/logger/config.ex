@@ -19,33 +19,6 @@ defmodule File.Only.Logger.Config do
                        truncate: @truncate_in_bytes
                      )
 
-  defmacro update_handler_config(handler_id) do
-    formatter = Macro.escape(@default_formatter)
-
-    quote bind_quoted: [id: handler_id, formatter: formatter] do
-      case :logger.update_handler_config(id, :formatter, formatter) do
-        :ok -> :ok
-        {:error, reason} -> :ok = Log.error(:upd_config, {reason, id, __ENV__})
-      end
-    end
-  end
-
-  defmacro add_handler(level) do
-    # Relative to wherever the BEAM (Erlang VM) was started...
-    path = ~c"./log/#{level}.log"
-    config = %{@config | file: path}
-    config = %{level: level, config: config, formatter: @formatter}
-    config = Macro.escape(config)
-    handler_id = :"#{level}_handler"
-
-    quote bind_quoted: [id: handler_id, config: config] do
-      case :logger.add_handler(id, :logger_std_h, config) do
-        :ok -> :ok
-        {:error, reason} -> :ok = Log.error(:add_handler, {reason, id, __ENV__})
-      end
-    end
-  end
-
   defmacro standard_formatter?(handler_id) do
     template = ["\n", :time, " ", :metadata, "[", :level, "] ", :message, "\n"]
 
@@ -65,11 +38,38 @@ defmodule File.Only.Logger.Config do
     end
   end
 
+  defmacro update_handler_config(handler_id) do
+    formatter = Macro.escape(@default_formatter)
+
+    quote bind_quoted: [id: handler_id, formatter: formatter] do
+      case :logger.update_handler_config(id, :formatter, formatter) do
+        :ok -> :ok
+        {:error, reason} -> :ok = Log.error(:upd_config, {reason, id, __ENV__})
+      end
+    end
+  end
+
   defmacro add_handlers(app) do
     quote bind_quoted: [app: app] do
       case Logger.add_handlers(app) do
         :ok -> :ok
         {:error, reason} -> :ok = Log.error(:handlers, {reason, app, __ENV__})
+      end
+    end
+  end
+
+  defmacro add_handler(level) do
+    # Relative to wherever the BEAM (Erlang VM) was started...
+    path = ~c"./log/#{level}.log"
+    config = %{@config | file: path}
+    config = %{level: level, config: config, formatter: @formatter}
+    config = Macro.escape(config)
+    handler_id = :"#{level}_handler"
+
+    quote bind_quoted: [id: handler_id, config: config] do
+      case :logger.add_handler(id, :logger_std_h, config) do
+        :ok -> :ok
+        {:error, reason} -> :ok = Log.error(:add_handler, {reason, id, __ENV__})
       end
     end
   end

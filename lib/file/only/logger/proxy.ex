@@ -206,7 +206,7 @@ defmodule File.Only.Logger.Proxy do
       iex> heredoc = """
       ...> • App: undefined
       ...> • Function:\s
-      ...>   File.Only.Logger.ProxyTest.'doctest\
+      ...>   File.Only.Logger.ProxyTest.'doctest \
       ...> """
       iex> Proxy.from(__ENV__) =~ heredoc
       true
@@ -230,7 +230,7 @@ defmodule File.Only.Logger.Proxy do
       ...> • App: undefined
       ...> • Module: File.Only.Logger.ProxyTest
       ...> • Function:\s
-      ...>   File.Only.Logger.ProxyTest.'doctest\
+      ...>   File.Only.Logger.ProxyTest.'doctest \
       ...> """
       iex> Proxy.from(__ENV__, __MODULE__) =~ heredoc
       true
