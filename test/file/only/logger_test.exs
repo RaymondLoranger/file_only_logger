@@ -186,6 +186,7 @@ defmodule File.Only.LoggerTest do
       • Module: File.Only.LoggerTest.Log
       • Function:\s
         File.Only.LoggerTest.'test Log.info/2 logs an i-n-f-o m-e-s-s-a-g-e'/1
+      • File: file_only_logger/test/file/only/logger_test.exs:177
       """
 
       assert File.read!(paths.info) =~ heredoc
@@ -203,6 +204,7 @@ defmodule File.Only.LoggerTest do
       • App: undefined
       • Module: File.Only.LoggerTest.Log
       • Function: File.Only.LoggerTest.'test Log.info/2 logs similar info msg'/1
+      • File: file_only_logger/test/file/only/logger_test.exs:196
       """
 
       assert File.read!(paths.info) =~ heredoc

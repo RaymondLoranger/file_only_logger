@@ -132,6 +132,24 @@ defmodule File.Only.Logger do
     end
   end
 
+  @doc """
+  Returns the absolute file name from the given `env` (`Macro.Env`).
+  """
+  defmacro file(env) do
+    quote do
+      File.Only.Logger.Proxy.file(unquote(env))
+    end
+  end
+
+  @doc """
+  Returns the line number from the given `env` (`Macro.Env`).
+  """
+  defmacro line(env) do
+    quote do
+      File.Only.Logger.Proxy.line(unquote(env))
+    end
+  end
+
   @doc ~S'''
   Will prefix `string` with "\n<padding>" if `string` is longer than
   `<line_length>` - `offset` where `<padding>` and `<line_length>` are

@@ -87,6 +87,45 @@ defmodule File.Only.Logger.Proxy do
 
   def fun(%Macro.Env{function: nil}), do: "'not inside a function'"
 
+  @doc """
+  Returns the absolute file name from the given `env` (`Macro.Env`).
+
+  ## Examples
+
+      iex> defmodule My.Example do
+      iex>   alias File.Only.Logger.Proxy
+      iex>   def say(_what) do
+      iex>     Proxy.file(__ENV__)
+      iex>   end
+      iex> end
+      iex> project_dir = File.cwd!() |> Path.dirname()
+      iex> My.Example.say("Hello") |> Path.relative_to(project_dir)
+      "file_only_logger/(for doctest at) lib/file/only/logger/proxy.ex"
+  """
+  @spec file(Macro.Env.t()) :: String.t()
+  def file(%Macro.Env{file: file} = _env) do
+    file
+  end
+
+  @doc """
+  Returns the line number from the given `env` (`Macro.Env`).
+
+  ## Examples
+
+      iex> defmodule My.Sample do
+      iex>   alias File.Only.Logger.Proxy
+      iex>   def foo(_what) do
+      iex>     Proxy.line(__ENV__)
+      iex>   end
+      iex> end
+      iex> My.Sample.foo(:bar)
+      118
+  """
+  @spec line(Macro.Env.t()) :: non_neg_integer
+  def line(%Macro.Env{line: line} = _env) do
+    line
+  end
+
   @doc ~S'''
   Will prefix `string` with "\n<padding>" if `string` is longer than
   `<line_length>` - `offset` where `<padding>` and `<line_length>` are
@@ -213,9 +252,14 @@ defmodule File.Only.Logger.Proxy do
   '''
   @spec from(Macro.Env.t()) :: String.t()
   def from(env) do
+    project_dir = File.cwd!() |> Path.dirname()
+    file = file(env) |> Path.relative_to(project_dir)
+    file_at_line = "#{file}:#{line(env)}"
+
     """
     • App: #{app(env.module)}
-    • Function: #{fun(env) |> maybe_break(12)}\
+    • Function: #{fun(env) |> maybe_break(12)}
+    • File: #{maybe_break(file_at_line, 8)}\
     """
   end
 
@@ -237,10 +281,15 @@ defmodule File.Only.Logger.Proxy do
   '''
   @spec from(Macro.Env.t(), module) :: String.t()
   def from(env, module) do
+    project_dir = File.cwd!() |> Path.dirname()
+    file = file(env) |> Path.relative_to(project_dir)
+    file_at_line = "#{file}:#{line(env)}"
+
     """
     • App: #{app(env.module)}
     • Module: #{mod(module)}
-    • Function: #{fun(env) |> maybe_break(12)}\
+    • Function: #{fun(env) |> maybe_break(12)}
+    • File: #{maybe_break(file_at_line, 8)}\
     """
   end
 
