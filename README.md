@@ -87,15 +87,16 @@ Check.log_warning(__ENV__.file)
 Check.log_warning("generate-line-break")
 # will respectively log these lines in the configured log file(s):
 
-2025-01-13 12:27:14.532 [warning]
+2026-11-04 06:45:40.754 [warning]
 'error' occurred...
 • Reason => 'no such file or directory'
 • File => "c:/Users/Ray/Documents/ex_dev/projects/file_only_logger/iex"
 • App: undefined
 • Module: Log
 • Function: Check.log_warning/1
+• File: iex:4
 
-2025-01-13 12:30:46.370 [warning]
+2026-11-04 06:50:41.812 [warning]
 'error' occurred...
 • Reason => 'no such file or directory'
 • File =>
@@ -103,6 +104,7 @@ Check.log_warning("generate-line-break")
 • App: undefined
 • Module: Log
 • Function: Check.log_warning/1
+• File: iex:4
 ```
 
 ## Note
