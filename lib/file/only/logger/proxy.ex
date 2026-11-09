@@ -252,14 +252,10 @@ defmodule File.Only.Logger.Proxy do
   '''
   @spec from(Macro.Env.t()) :: String.t()
   def from(env) do
-    project_dir = File.cwd!() |> Path.dirname()
-    file = file(env) |> Path.relative_to(project_dir)
-    file_at_line = "#{file}:#{line(env)}"
-
     """
     • App: #{app(env.module)}
     • Function: #{fun(env) |> maybe_break(12)}
-    • File: #{maybe_break(file_at_line, 8)}\
+    • File: #{file_at_line(env) |> maybe_break(8)}\
     """
   end
 
@@ -281,15 +277,11 @@ defmodule File.Only.Logger.Proxy do
   '''
   @spec from(Macro.Env.t(), module) :: String.t()
   def from(env, module) do
-    project_dir = File.cwd!() |> Path.dirname()
-    file = file(env) |> Path.relative_to(project_dir)
-    file_at_line = "#{file}:#{line(env)}"
-
     """
     • App: #{app(env.module)}
     • Module: #{mod(module)}
     • Function: #{fun(env) |> maybe_break(12)}
-    • File: #{maybe_break(file_at_line, 8)}\
+    • File: #{file_at_line(env) |> maybe_break(8)}\
     """
   end
 
@@ -297,4 +289,11 @@ defmodule File.Only.Logger.Proxy do
 
   @spec level :: :all | :none | :logger.level()
   defp level, do: get_env(:level, :all)
+
+  @spec file_at_line(Macro.Env.t()) :: String.t()
+  defp file_at_line(env) do
+    project_dir = File.cwd!() |> Path.dirname()
+    file = file(env) |> Path.relative_to(project_dir)
+    "#{file}:#{line(env)}"
+  end
 end
