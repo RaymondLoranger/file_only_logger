@@ -27,13 +27,8 @@ defmodule File.Only.Logger.MixProject do
 
   defp package do
     [
-      files: [
-        # NOTE: ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
-        "lib/file/only/{logger,logger.ex}",
-        "mix.exs",
-        "README*",
-        "config/persist*.exs"
-      ],
+      files: ["lib", "mix.exs", "README*", "config/persist*.exs"],
+      exclude_patterns: ["lib/file/only/logger/ie.ex"],
       maintainers: ["Raymond Loranger"],
       licenses: ["MIT"],
       links: %{"GitHub" => source_url()}

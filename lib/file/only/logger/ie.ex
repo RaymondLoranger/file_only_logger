@@ -1,4 +1,4 @@
-defmodule File.Only.IE.Log do
+defmodule File.Only.Logger.IE.Log do
   @moduledoc false
 
   use File.Only.Logger
@@ -33,14 +33,14 @@ defmodule File.Only.IE.Log do
   defp via(name), do: {:via, Registry, {:registry, {Server, name}}}
 end
 
-defmodule File.Only.IE do
+defmodule File.Only.Logger.IE do
   @moduledoc false
 
   # Example of an IEx session...
   #
   #   iex -S mix
   #
-  #   use File.Only.IE
+  #   use File.Only.Logger.IE
 
   #   log_error # And then check log files
   #   log_info # And then check log files

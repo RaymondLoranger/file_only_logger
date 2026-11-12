@@ -8,11 +8,6 @@ defmodule File.Only.Logger.Proxy do
   require Logger
 
   @levels get_env(:levels)
-  @default_line_length get_env(:default_line_length)
-  @default_padding get_env(:default_padding)
-
-  @line_length get_env(:line_length, @default_line_length)
-  @padding get_env(:padding, @default_padding)
 
   @typedoc "Message to be logged"
   @type message :: String.t() | iodata | fun | keyword | map
@@ -103,9 +98,7 @@ defmodule File.Only.Logger.Proxy do
       "file_only_logger/(for doctest at) lib/file/only/logger/proxy.ex"
   """
   @spec file(Macro.Env.t()) :: String.t()
-  def file(%Macro.Env{file: file} = _env) do
-    file
-  end
+  def file(%Macro.Env{file: file} = _env), do: file
 
   @doc """
   Returns the line number from the given `env` (`Macro.Env`).
@@ -119,12 +112,10 @@ defmodule File.Only.Logger.Proxy do
       iex>   end
       iex> end
       iex> My.Sample.foo(:bar)
-      118
+      111
   """
   @spec line(Macro.Env.t()) :: non_neg_integer
-  def line(%Macro.Env{line: line} = _env) do
-    line
-  end
+  def line(%Macro.Env{line: line} = _env), do: line
 
   @doc ~S'''
   Will prefix `string` with "\n<padding>" if `string` is longer than
@@ -177,13 +168,13 @@ defmodule File.Only.Logger.Proxy do
     line_length =
       case options[:line_length] do
         length when is_pos_integer(length) -> length
-        _other -> @line_length
+        _other -> line_length()
       end
 
     padding =
       case options[:padding] do
         filler when is_binary(filler) -> filler
-        _other -> @padding
+        _other -> padding()
       end
 
     if String.length(string) > line_length - offset,
@@ -285,10 +276,28 @@ defmodule File.Only.Logger.Proxy do
     """
   end
 
-  ## Private functions
+  @doc """
+  Returns the filler to be inserted after a line break by `maybe_break/3`.
+  Defaults to `"\s\s"`.
+  """
+  @spec padding :: String.t()
+  def padding, do: get_env(:padding, "\s\s")
 
+  @doc """
+  Returns the preferred line length of messages sent to log files.
+  Defaults to `80`.
+  """
+  @spec line_length :: pos_integer
+  def line_length, do: get_env(:line_length, 80)
+
+  @doc """
+  Returns the configured log level. Messages with lesser severity are ignored.
+  Defaults to `:all`.
+  """
   @spec level :: :all | :none | :logger.level()
-  defp level, do: get_env(:level, :all)
+  def level, do: get_env(:level, :all)
+
+  ## Private functions
 
   @spec file_at_line(Macro.Env.t()) :: String.t()
   defp file_at_line(env) do

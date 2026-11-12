@@ -127,27 +127,21 @@ defmodule File.Only.Logger do
       end
   '''
   defmacro fun(env) do
-    quote do
-      File.Only.Logger.Proxy.fun(unquote(env))
-    end
+    quote do: File.Only.Logger.Proxy.fun(unquote(env))
   end
 
   @doc """
   Returns the absolute file name from the given `env` (`Macro.Env`).
   """
   defmacro file(env) do
-    quote do
-      File.Only.Logger.Proxy.file(unquote(env))
-    end
+    quote do: File.Only.Logger.Proxy.file(unquote(env))
   end
 
   @doc """
   Returns the line number from the given `env` (`Macro.Env`).
   """
   defmacro line(env) do
-    quote do
-      File.Only.Logger.Proxy.line(unquote(env))
-    end
+    quote do: File.Only.Logger.Proxy.line(unquote(env))
   end
 
   @doc ~S'''
@@ -201,9 +195,7 @@ defmodule File.Only.Logger do
       end
   '''
   defmacro app do
-    quote do
-      File.Only.Logger.Proxy.app(__MODULE__)
-    end
+    quote do: File.Only.Logger.Proxy.app(__MODULE__)
   end
 
   @doc ~S'''
@@ -222,9 +214,7 @@ defmodule File.Only.Logger do
       end
   '''
   defmacro mod do
-    quote do
-      File.Only.Logger.Proxy.mod(__MODULE__)
-    end
+    quote do: File.Only.Logger.Proxy.mod(__MODULE__)
   end
 
   @doc ~S'''
@@ -244,9 +234,7 @@ defmodule File.Only.Logger do
       end
   '''
   defmacro from(env) do
-    quote do
-      File.Only.Logger.Proxy.from(unquote(env))
-    end
+    quote do: File.Only.Logger.Proxy.from(unquote(env))
   end
 
   @doc ~S'''
@@ -266,8 +254,30 @@ defmodule File.Only.Logger do
       end
   '''
   defmacro from(env, module) do
-    quote do
-      File.Only.Logger.Proxy.from(unquote(env), unquote(module))
-    end
+    quote do: File.Only.Logger.Proxy.from(unquote(env), unquote(module))
+  end
+
+  @doc """
+  Returns the filler to be inserted after a line break by `maybe_break/3`.
+  Defaults to `"\s\s"`.
+  """
+  defmacro padding do
+    quote do: File.Only.Logger.Proxy.padding()
+  end
+
+  @doc """
+  Returns the preferred line length of messages sent to log files.
+  Defaults to `80`.
+  """
+  defmacro line_length do
+    quote do: File.Only.Logger.Proxy.line_length()
+  end
+
+  @doc """
+  Returns the configured log level. Messages with lesser severity are ignored.
+  Defaults to `:all`.
+  """
+  defmacro level do
+    quote do: File.Only.Logger.Proxy.level()
   end
 end
