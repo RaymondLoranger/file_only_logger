@@ -152,9 +152,9 @@ defmodule File.Only.Logger do
   ## Options
 
     * `:line_length` (positive integer) - the preferred line length of messages
-      sent to the log files. Defaults to 80.
+      sent to log files. Defaults to `80`.
     * `:padding` (string) - Filler inserted after the line break. Defaults to
-      "\s\s".
+      `"\s\s"`.
 
   ## Examples
 
@@ -257,7 +257,7 @@ defmodule File.Only.Logger do
     quote do: File.Only.Logger.Proxy.from(unquote(env), unquote(module))
   end
 
-  @doc """
+  @doc ~S"""
   Returns the filler to be inserted after a line break by `maybe_break/3`.
   Defaults to `"\s\s"`.
   """
