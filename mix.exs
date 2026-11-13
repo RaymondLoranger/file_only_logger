@@ -4,7 +4,7 @@ defmodule File.Only.Logger.MixProject do
   def project do
     [
       app: :file_only_logger,
-      version: "0.2.75",
+      version: "0.2.76",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       name: "FileOnly Logger",
